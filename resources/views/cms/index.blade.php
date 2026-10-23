@@ -4,7 +4,7 @@
     <main id="main">
         <section id="about" class="about">
             <div class="container rounded mt-3">
-                <form action="{{ route('cms.search') }}" method="post">
+                <form action="{{ route('cms.search') }}" method="POST">
                     @csrf
                     <div class="row p-3">
                         <div class="col-8">
@@ -19,7 +19,8 @@
             </div>
         </section>
 
-        <section id="about" class="about">
+        <section id="hasil-lapangan" class="about"
+            @if(request()->routeIs('cms.search')) data-scroll-result @endif>
             <div class="d-flex justify-content-center">
                 @if (session('success'))
                     <div class="alert alert-success border-left-success alert-dismissible fade show" role="alert">

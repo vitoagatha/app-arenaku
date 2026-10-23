@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Lapangan;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,11 +25,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $users = User::count();
+        $user = auth()->user();
+
+        $jumlahLapangan = $user->role === 'admin'
+            ? Lapangan::count()
+            : Lapangan::where('user_id', $user->id)->count();
 
         $widget = [
-            'users' => $users,
-            //...
+            'users' => User::count(),
+            'lapangan' => $jumlahLapangan,
         ];
 
         return view('home', compact('widget'));

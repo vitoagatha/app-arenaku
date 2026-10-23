@@ -71,6 +71,27 @@
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
+    <script>
+        window.addEventListener('load', function () {
+            // Cari bagian yang ditandai sebagai hasil pencarian
+            const target = document.querySelector('[data-scroll-result]');
+
+            // Jika tidak ada hasil yang ditandai, jangan scroll
+            if (!target) return;
+
+            // Hitung posisi elemen dari bagian atas halaman
+            const position = target.getBoundingClientRect().top
+                + window.scrollY - 90;
+
+            // Scroll otomatis menuju bagian hasil
+            window.scrollTo({
+                top: Math.max(0, position),
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+
 </body>
 
 </html>
