@@ -53,7 +53,7 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>{{ __('Dashboard') }}</span></a>
             </li>
-            @if (Auth::user()->role === 'admin')
+            @if (Auth::check() && Auth::user()->role === 'admin')
                 <li class="nav-item {{ Nav::isRoute('users.*') }}">
                     <a class="nav-link" href="{{ route('users.index') }}">
                         <i class="fas fa-fw fa-users"></i>

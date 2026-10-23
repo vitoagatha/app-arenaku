@@ -29,7 +29,7 @@
                                         @csrf
                                         <div class="col-md-12">
                                             <label for="tanggal" class="form-label">Tanggal</label>
-                                            <input type="date" class="form-control" name="tanggal" id="tanggal"
+                                            <input type="date" class="form-control" name="tanggal" id="tanggal" value="{{ old('tanggal', $tanggal ?? '') }}"
                                                 required>
                                         </div>
                                         <div class="col-12">
@@ -45,7 +45,7 @@
         </section>
 
         @if (isset($tanggal))
-            <section id="about" class="about">
+            <section id="hasil-tanggal" class="about" data-scroll-result>
                 <div class="container mt-1">
                     <div class="d-flex justify-content-center h3 py-5">Jam kosong hari ini</div>
                     @foreach ($jadwalLapangan as $jadwal)

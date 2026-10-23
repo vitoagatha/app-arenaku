@@ -68,7 +68,7 @@ class LapanganController extends Controller
     public function show($id)
     {
         try {
-            $lapangan = Lapangan::findLapanganById($id);
+            $lapangan = $this->findLapanganById($id);
             return view('dashboard.lapangan.show', compact('lapangan'));
         } catch (ModelNotFoundException $e) {
             return redirect()->route('lapangan.index')->with('error', 'Lapangan not found.');
@@ -81,7 +81,7 @@ class LapanganController extends Controller
     public function edit($id)
     {
         try {
-            $lapangan = Lapangan::findLapanganById($id);
+            $lapangan = $this->findLapanganById($id);
             return view('dashboard.lapangan.edit', compact('lapangan'));
         } catch (ModelNotFoundException $e) {
             return redirect()->route('lapangan.index')->with('error', 'Lapangan not found.');
@@ -93,41 +93,35 @@ class LapanganController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nama_lapangan' => 'required|string|max:155',
             'alamat' => 'required|string',
             'deskripsi' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+        $lapangan = $this->findLapanganById($id);
+
+        $oldImagePath = $lapangan->image;
+
+        $lapangan->nama_lapangan = $validated['nama_lapangan'];
+        $lapangan->alamat = $validated['alamat'];
+        $lapangan->deskripsi = $validated['deskripsi'] ?? null;
+
+        if ($request->hasFile('image')) {
+            $lapangan->image = $request->file('image')
+                ->store('uploads', 'public');
         }
 
-        try {
-            $lapangan = Lapangan::findLapanganById($id);
+        $lapangan->save();
 
-            // Store the old image path before updating
-            $oldImagePath = $lapangan->image;
-
-            $lapangan->nama_lapangan = $request->input('nama_lapangan');
-            $lapangan->alamat = $request->input('alamat');
-            $lapangan->deskripsi = $request->input('deskripsi');
-            if ($request->hasFile('image')) {
-                // Delete the old image if it exists
-                if ($oldImagePath) {
-                    $this->deleteImage($oldImagePath);
-                }
-
-                $imagePath = $request->file('image')->store('uploads', 'public');
-                $lapangan->image = $imagePath;
-            }
-            $user->save();
-
-            return redirect()->route('lapangan.index')->with('success', 'Lapangan updated successfully.');
-        } catch (ModelNotFoundException $e) {
-            return redirect()->route('lapangan.index')->with('error', 'Lapangan not found.');
+        if ($request->hasFile('image') && $oldImagePath) {
+            Storage::disk('public')->delete($oldImagePath);
         }
+
+        return redirect()
+            ->route('lapangan.index')
+            ->with('success', 'Lapangan updated successfully.');
     }
 
     /**
@@ -136,7 +130,7 @@ class LapanganController extends Controller
     public function destroy($id)
     {
         try {
-            $lapangan = Lapangan::findLapanganById($id);
+            $lapangan = $this->findLapanganById($id);
 
             $oldImagePath = $lapangan->image;
 
@@ -174,9 +168,11 @@ class LapanganController extends Controller
         $user = Auth::user();
 
         if ($user->role === 'admin') {
-            return Lapangan::findLapanganById($id);
-        } else {
-            return Lapangan::where('id', $id)->where('user_id', $user->id)->firstOrFail();
+            return Lapangan::findOrFail($id);
         }
+
+        return Lapangan::where('id', $id)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
     }
 }

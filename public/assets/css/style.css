@@ -2290,3 +2290,8 @@ section {
     font-size: 13px;
     color: #fff;
 }
+
+#hasil-lapangan,
+#hasil-jadwal {
+    scroll-margin-top: 90px;
+}
