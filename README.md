@@ -1,84 +1,78 @@
-# Laravel SB Admin 2
+<div align="center">
 
-SB Admin 2 for Laravel.
+# Arenaku
 
-| Laravel Version | Branch | Support     |
-|-----------------|--------|-------------|
-| 11.0            | main   |             |
-| 10.0            | v10.0  |             |
-| 9.0             | v9.0   | End of life |
-| 8.0             | v8.0   | End of life |
+**Aplikasi web pencarian dan pemesanan lapangan olahraga**
 
-## Requirements
+Membantu pengunjung menemukan lapangan dan mengecek jadwal yang tersedia, sekaligus menyediakan dashboard bagi admin dan penjaga untuk mengelola data lapangan, jadwal, serta pemesanan.
 
-- PHP >= 8.2
-- Ctype PHP Extension
-- cURL PHP Extension
-- DOM PHP Extension
-- Fileinfo PHP Extension
-- Filter PHP Extension
-- Hash PHP Extension
-- Mbstring PHP Extension
-- OpenSSL PHP Extension
-- PCRE PHP Extension
-- PDO PHP Extension
-- Session PHP Extension
-- Tokenizer PHP Extension
-- XML PHP Extension
+</div>
 
-## Installation
+---
 
-- Clone the repo and `cd` into it
-- Run `composer install`
-- Rename or copy `.env.example` file to `.env`
-- Run `php artisan key:generate`
-- Set your database credentials in your `.env` file
+## Tentang Proyek
 
-## Note
+**Arenaku** merupakan aplikasi web berbasis Laravel untuk menampilkan informasi tempat olahraga dan mengelola proses pemesanan lapangan. Pengunjung dapat mencari lapangan berdasarkan nama, melihat detail fasilitas, memeriksa ketersediaan jadwal berdasarkan tanggal, dan melanjutkan ke formulir pemesanan.
 
-Recommend to install this preset on a project that you are starting from scratch, otherwise your project's design might break.
+Di sisi pengelola, aplikasi menyediakan dashboard untuk mengelola lapangan, unit lapangan (*court*), jadwal, pengguna, serta data booking. Proyek ini juga digunakan sebagai media pembelajaran pengembangan aplikasi berbasis **MVC (Model–View–Controller)** dan pemeliharaan aplikasi Laravel.
 
-If you found this project useful, then please consider giving it a :star:
+## Fitur Utama
 
-## Credits
+| Pengguna | Fitur |
+| --- | --- |
+| **Pengunjung** | Melihat daftar lapangan dan informasi fasilitas; mencari lapangan berdasarkan nama. |
+| **Pengunjung** | Membuka detail lapangan dan mengecek ketersediaan jadwal berdasarkan tanggal. |
+| **Pengunjung** | Mengisi formulir konfirmasi booking pada jadwal yang tersedia. |
+| **Admin** | Login dan mengelola data lapangan, unit lapangan (*court*), jadwal, booking, dan pengguna. |
+| **Penjaga** | Mengakses dashboard untuk mengelola data lapangan dan jadwal yang menjadi tanggung jawabnya. |
 
-Laravel SB Admin 2 uses some open-source third-party libraries/packages, many thanks to the web community.
+## Tampilan Aplikasi
 
-- Laravel - Open source framework.
-- LaravelEasyNav - Making managing navigation in Laravel easy.
-- SB Admin 2 - Thanks to Start Bootstrap.
+### 1. Beranda dan Pencarian Lapangan
 
-## Preview
+Pengunjung dapat melihat daftar lapangan, informasi lokasi dan deskripsi, kemudian menggunakan kolom pencarian atau memilih tombol **Booking Sekarang!** untuk melihat detail lapangan.
 
-`login`
+![Halaman beranda Arenaku dengan fitur pencarian dan daftar lapangan](docs/screenshots/daftar-lapangan.png)
 
-<img src="https://imgur.com/YjGp6Sbl.png">
+### 2. Detail Lapangan dan Cek Ketersediaan
 
-***
+Halaman detail menampilkan foto, lokasi, dan informasi lapangan. Pengunjung dapat memilih tanggal dan menekan **Cek Ketersediaan** untuk melihat jadwal pada tanggal tersebut.
 
-`register`
+![Halaman detail lapangan Arenaku dan formulir cek ketersediaan](docs/screenshots/detail-cek-ketersediaan.png)
 
-<img src="https://imgur.com/Wj09cu4l.png">
+📚 **Lihat penjelasan lebih lengkap dan panduan menambah screenshot:** [docs/TAMPILAN.md](docs/TAMPILAN.md).
 
-***
+## Teknologi yang Digunakan
 
-`dashboard`
+| Bagian | Teknologi |
+| --- | --- |
+| Backend | PHP 8.2+, Laravel 11 |
+| Frontend | Blade, HTML, CSS, JavaScript, Bootstrap / template SB Admin 2 |
+| Database | MySQL |
+| Autentikasi | Laravel UI |
+| Asset bundling | Laravel Mix 5 (Webpack) |
+| Lingkungan lokal | Laragon (dapat disesuaikan untuk lingkungan PHP lain) |
 
-<img src="https://imgur.com/CrmOfT5l.png">
 
-***
 
-`profile`
-
-<img src="https://imgur.com/5t4eS1rl.png">
-
-***
-
-`logout`
-
-<img src="https://imgur.com/d9JclOYl.png">
-
-## License
-
-Licensed under the [MIT](LICENSE) license.
-# app_booking_lapanganolahraga
+```text
+app-arenaku/
+├── app/
+│   ├── Http/Controllers/    # Logika request, pencarian, jadwal, booking
+│   └── Models/              # Model Eloquent dan relasi data
+├── database/                # Migration dan kebutuhan basis data
+├── docs/
+│   ├── TAMPILAN.md          # Penjelasan tampilan aplikasi
+│   └── screenshots/         # Dokumentasi berupa gambar
+├── public/                  # Aset publik dan entry point
+├── resources/
+│   └── views/
+│       ├── cms/             # Halaman publik
+│       ├── dashboard/       # Halaman pengelola
+│       └── layouts/         # Layout Blade
+├── routes/
+│   └── web.php              # Routing web
+├── composer.json
+├── package.json
+└── webpack.mix.js
+```
