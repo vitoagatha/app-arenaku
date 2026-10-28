@@ -40,8 +40,6 @@ Halaman detail menampilkan foto, lokasi, dan informasi lapangan. Pengunjung dapa
 
 ![Halaman detail lapangan Arenaku dan formulir cek ketersediaan](docs/screenshots/detail-cek-ketersediaan.png)
 
-📚 **Lihat penjelasan lebih lengkap dan panduan menambah screenshot:** [docs/TAMPILAN.md](docs/TAMPILAN.md).
-
 ## Teknologi yang Digunakan
 
 | Bagian | Teknologi |
@@ -52,27 +50,3 @@ Halaman detail menampilkan foto, lokasi, dan informasi lapangan. Pengunjung dapa
 | Autentikasi | Laravel UI |
 | Asset bundling | Laravel Mix 5 (Webpack) |
 | Lingkungan lokal | Laragon (dapat disesuaikan untuk lingkungan PHP lain) |
-
-
-
-```text
-app-arenaku/
-├── app/
-│   ├── Http/Controllers/    # Logika request, pencarian, jadwal, booking
-│   └── Models/              # Model Eloquent dan relasi data
-├── database/                # Migration dan kebutuhan basis data
-├── docs/
-│   ├── TAMPILAN.md          # Penjelasan tampilan aplikasi
-│   └── screenshots/         # Dokumentasi berupa gambar
-├── public/                  # Aset publik dan entry point
-├── resources/
-│   └── views/
-│       ├── cms/             # Halaman publik
-│       ├── dashboard/       # Halaman pengelola
-│       └── layouts/         # Layout Blade
-├── routes/
-│   └── web.php              # Routing web
-├── composer.json
-├── package.json
-└── webpack.mix.js
-```
