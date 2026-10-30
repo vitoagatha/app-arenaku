@@ -1,3 +1,6 @@
+@hasSection('courtside')
+    @include('layouts.public-courtside')
+@else
 <!DOCTYPE html>
 <html lang="en">
 
@@ -95,3 +98,4 @@
 </body>
 
 </html>
+@endif
