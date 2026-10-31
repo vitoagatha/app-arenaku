@@ -1,129 +1,28 @@
 @extends('layouts.admin')
-
 @section('main-content')
-    <h1 class="h3 mb-4 text-gray-800">{{ __('Profile') }}</h1>
-    @if (session('success'))
-        <div class="alert alert-success border-left-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-
-    @if ($errors->any())
-        <div class="alert alert-danger border-left-danger" role="alert">
-            <ul class="pl-4 my-2">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <div class="row">
-        <div class="col-lg-4 order-lg-2">
-            <div class="card shadow mb-4">
-                <div class="card-profile-image mt-4">
-                    <figure class="rounded-circle avatar avatar font-weight-bold"
-                        style="font-size: 60px; height: 180px; width: 180px;" data-initial="{{ Auth::user()->name[0] }}">
-                    </figure>
+    <div class="akd-page-heading"><h1>Profil saya</h1><p>Perbarui informasi akun dan kata sandi untuk akses pengelolaan.</p></div>
+    @include('components.dashboard.feedback')
+    <div class="akd-profile-grid">
+        <aside class="akd-surface akd-profile-summary" aria-label="Informasi akun"><span class="akd-avatar" aria-hidden="true">{{ mb_substr(Auth::user()->name, 0, 1) }}</span><h2>{{ Auth::user()->fullName }}</h2><p>{{ Auth::user()->role === 'admin' ? 'Admin' : ucfirst(Auth::user()->role) }}</p><p class="akd-muted">{{ Auth::user()->email }}</p></aside>
+        <form class="akd-surface akd-profile-form" method="POST" action="{{ route('profile.update') }}" data-profile-form>
+            @csrf
+            @method('PUT')
+            <fieldset><legend>Informasi pribadi</legend><p class="akd-muted">Nama depan dan alamat email wajib diisi.</p>
+                <div class="akd-form-grid">
+                    @include('components.dashboard.profile-field', ['name' => 'name', 'label' => 'Nama depan (wajib)', 'type' => 'text', 'autocomplete' => 'given-name'])
+                    @include('components.dashboard.profile-field', ['name' => 'last_name', 'label' => 'Nama belakang', 'type' => 'text', 'autocomplete' => 'family-name'])
+                    @include('components.dashboard.profile-field', ['name' => 'email', 'label' => 'Alamat email (wajib)', 'type' => 'email', 'autocomplete' => 'email'])
+                    @include('components.dashboard.profile-field', ['name' => 'no_handphone', 'label' => 'Nomor handphone', 'type' => 'tel', 'autocomplete' => 'tel'])
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="text-center">
-                                <h5 class="font-weight-bold">{{ Auth::user()->fullName }}</h5>
-                                <p>Administrator</p>
-                            </div>
-                        </div>
-                    </div>
+            </fieldset>
+            <fieldset><legend>Ubah kata sandi</legend><p class="akd-muted">Kosongkan bagian ini jika tidak ingin mengubah kata sandi. Kata sandi baru harus berisi 8–12 karakter.</p>
+                @include('components.dashboard.profile-field', ['name' => 'current_password', 'label' => 'Kata sandi saat ini', 'type' => 'password', 'autocomplete' => 'current-password'])
+                <div class="akd-form-grid">
+                    @include('components.dashboard.profile-field', ['name' => 'new_password', 'label' => 'Kata sandi baru', 'type' => 'password', 'autocomplete' => 'new-password'])
+                    @include('components.dashboard.profile-field', ['name' => 'password_confirmation', 'label' => 'Ulangi kata sandi baru', 'type' => 'password', 'autocomplete' => 'new-password'])
                 </div>
-            </div>
-        </div>
-
-        <div class="col-lg-8 order-lg-1">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">My Account</h6>
-                </div>
-                <div class="card-body">
-                    <form method="POST" action="{{ route('profile.update') }}" autocomplete="off">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <input type="hidden" name="_method" value="PUT">
-                        <h6 class="heading-small text-muted mb-4">User information</h6>
-                        <div class="pl-lg-4">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group focused">
-                                        <label class="form-control-label" for="name">Name<span
-                                                class="small text-danger">*</span></label>
-                                        <input type="text" id="name" class="form-control" name="name"
-                                            placeholder="Name" value="{{ old('name', Auth::user()->name) }}">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group focused">
-                                        <label class="form-control-label" for="last_name">Last name</label>
-                                        <input type="text" id="last_name" class="form-control" name="last_name"
-                                            placeholder="Last name" value="{{ old('last_name', Auth::user()->last_name) }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="email">Email address<span
-                                                class="small text-danger">*</span></label>
-                                        <input type="email" id="email" class="form-control" name="email"
-                                            placeholder="example@example.com"
-                                            value="{{ old('email', Auth::user()->email) }}">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="no_handphone">No Handphone<span
-                                                class="small text-danger">*</span></label>
-                                        <input type="number" id="no_handphone" class="form-control" name="no_handphone"
-                                            placeholder="08********"
-                                            value="{{ old('no_handphone', Auth::user()->no_handphone) }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="form-group focused">
-                                        <label class="form-control-label" for="current_password">Current password</label>
-                                        <input type="password" id="current_password" class="form-control"
-                                            name="current_password" placeholder="Current password">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group focused">
-                                        <label class="form-control-label" for="new_password">New password</label>
-                                        <input type="password" id="new_password" class="form-control" name="new_password"
-                                            placeholder="New password">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group focused">
-                                        <label class="form-control-label" for="confirm_password">Confirm password</label>
-                                        <input type="password" id="confirm_password" class="form-control"
-                                            name="password_confirmation" placeholder="Confirm password">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pl-lg-4">
-                            <div class="row">
-                                <div class="col text-right">
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+            </fieldset>
+            <div class="akd-form-actions"><button class="akd-button" type="submit">Simpan perubahan</button><a href="{{ route('home') }}">Kembali ke ringkasan</a><span role="status" data-profile-status></span></div>
+        </form>
     </div>
 @endsection

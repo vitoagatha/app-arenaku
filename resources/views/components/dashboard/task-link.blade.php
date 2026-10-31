@@ -1,0 +1,1 @@
+<a class="akd-task" href="{{ route($route) }}"><i class="fas fa-{{ $icon }}" aria-hidden="true"></i><span><strong>{{ $label }}</strong><small>{{ $description }}</small></span><i class="fas fa-chevron-right" aria-hidden="true"></i></a>

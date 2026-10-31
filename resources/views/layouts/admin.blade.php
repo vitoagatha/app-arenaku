@@ -1,202 +1,78 @@
+@php
+    $isAdmin = Auth::user()->role === 'admin';
+    $roleLabel = $isAdmin ? 'Admin' : ucfirst(Auth::user()->role);
+    $pageTitle = request()->routeIs('profile*') ? 'Profil saya' : (request()->routeIs('home') ? 'Ringkasan' : (request()->routeIs('lapangan.*') ? 'Lapangan' : (request()->routeIs('courts.*') ? 'Court' : (request()->routeIs('jadwal.*') ? 'Jadwal lapangan' : (request()->routeIs('booking.*') ? 'Booking' : (request()->routeIs('users.*') ? 'Pengguna' : 'Pengelolaan'))))));
+@endphp
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
+<html lang="id">
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Laravel {{ config('app.name', 'Laravel') }}">
-    <meta name="author" content="Alejandro RH">
-
-    <!-- CSRF Token -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Fonts -->
+    <title>{{ $pageTitle }} | Arenaku</title>
+    <meta name="description" content="Pengelolaan lapangan, jadwal, dan booking Arenaku.">
+    <link href="{{ asset('assets/img/icon_arenaku.jpg') }}" rel="icon" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Styles -->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
-
-    <!-- Favicon -->
-    <link href="{{ asset('img/favicon.png') }}" rel="icon" type="image/png">
-
-    <!-- Custom styles for this page -->
     <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/arenaku-dashboard.css') }}" rel="stylesheet">
 </head>
-
-<body id="page-top">
-
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/home') }}">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">{{ config('app.name', 'Laravel') }}</div>
-            </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item {{ Nav::isRoute('home') }}">
-                <a class="nav-link" href="{{ route('home') }}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>{{ __('Dashboard') }}</span></a>
-            </li>
-            @if (Auth::check() && Auth::user()->role === 'admin')
-                <li class="nav-item {{ Nav::isRoute('users.*') }}">
-                    <a class="nav-link" href="{{ route('users.index') }}">
-                        <i class="fas fa-fw fa-users"></i>
-                        <span>{{ __('Pengguna') }}</span></a>
-                </li>
-                <li class="nav-item {{ Nav::isRoute('courts.*') }}">
-                    <a class="nav-link" href="{{ route('courts.index') }}">
-                        <i class="fas fa-fw fa-list"></i>
-                        <span>{{ __('Data Court') }}</span></a>
-                </li>
-            @endif
-            <li class="nav-item {{ Nav::isRoute('lapangan.*') }}">
-                <a class="nav-link" href="{{ route('lapangan.index') }}">
-                    <i class="fas fa-fw fa-building"></i>
-                    <span>{{ __('Lapangan') }}</span></a>
-            </li>
-            <li class="nav-item {{ Nav::isRoute('jadwal.*') }}">
-                <a class="nav-link" href="{{ route('jadwal.index') }}">
-                    <i class="fas fa-fw fa-calendar-alt"></i>
-                    <span>{{ __('Atur Jadwal') }}</span></a>
-            </li>
-            <li class="nav-item {{ Nav::isRoute('booking.*') }}">
-                <a class="nav-link" href="{{ route('booking.index') }}">
-                    <i class="fas fa-fw fa-list-alt"></i>
-                    <span>{{ __('Daftar Booking') }}</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+<body class="ak-dashboard" id="page-top">
+    <a href="#dashboard-main" class="akd-skip">Langsung ke konten</a>
+    <div class="akd-shell">
+        <aside class="akd-sidebar" id="dashboard-navigation" aria-label="Menu pengelolaan">
+            <div class="akd-sidebar-brand">
+                <a class="akd-brand" href="{{ route('home') }}" aria-label="Arenaku, ringkasan"><img src="{{ asset('assets/img/logo_arenaku.jpg') }}" width="3656" height="2680" alt="Arenaku"></a>
+                <button class="akd-icon-button akd-close" type="button" data-nav-close aria-label="Tutup navigasi"><i class="fas fa-times" aria-hidden="true"></i></button>
             </div>
-
-        </ul>
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <div id="content">
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span
-                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
-                                <figure class="img-profile rounded-circle avatar font-weight-bold"
-                                    data-initial="{{ Auth::user()->name[0] }}"></figure>
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="{{ route('profile') }}">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    {{ __('Profile') }}
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    {{ __('Logout') }}
-                                </a>
-                            </div>
-                        </li>
-
+            <p class="akd-sidebar-caption">Pengelolaan lapangan</p>
+            <nav aria-label="Navigasi dashboard">
+                <ul class="akd-nav-list">
+                    @include('components.dashboard.nav-link', ['route' => 'home', 'pattern' => 'home', 'label' => 'Ringkasan', 'icon' => 'th-large'])
+                </ul>
+                <p class="akd-nav-group">Operasional</p>
+                <ul class="akd-nav-list">
+                    @include('components.dashboard.nav-link', ['route' => 'lapangan.index', 'pattern' => 'lapangan.*', 'label' => 'Lapangan', 'icon' => 'building'])
+                    @include('components.dashboard.nav-link', ['route' => 'jadwal.index', 'pattern' => 'jadwal.*', 'label' => 'Atur jadwal', 'icon' => 'calendar-alt'])
+                    @include('components.dashboard.nav-link', ['route' => 'booking.index', 'pattern' => 'booking.*', 'label' => 'Daftar booking', 'icon' => 'clipboard-list'])
+                </ul>
+                @if ($isAdmin)
+                    <p class="akd-nav-group">Administrasi</p>
+                    <ul class="akd-nav-list">
+                        @include('components.dashboard.nav-link', ['route' => 'courts.index', 'pattern' => 'courts.*', 'label' => 'Data court', 'icon' => 'list'])
+                        @include('components.dashboard.nav-link', ['route' => 'users.index', 'pattern' => 'users.*', 'label' => 'Pengguna', 'icon' => 'users'])
                     </ul>
-
-                </nav>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    @yield('main-content')
-
-                </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; {{ config('app.name', 'Laravel') }}
-                            {{ now()->year }}</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">{{ __('Ready to Leave?') }}</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-link" type="button" data-dismiss="modal">{{ __('Cancel') }}</button>
-                    <a class="btn btn-danger" href="{{ route('logout') }}"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                </div>
-            </div>
+                @endif
+            </nav>
+            <a class="akd-public-link" href="{{ route('/') }}"><i class="fas fa-external-link-alt" aria-hidden="true"></i>Lihat halaman publik</a>
+        </aside>
+        <button class="akd-backdrop" type="button" data-nav-close aria-label="Tutup navigasi" hidden></button>
+        <div class="akd-workspace">
+            <header class="akd-header">
+                <div class="akd-header-heading"><button class="akd-icon-button akd-menu" type="button" data-nav-toggle aria-controls="dashboard-navigation" aria-expanded="false" aria-label="Buka navigasi"><i class="fas fa-bars" aria-hidden="true"></i></button><span>{{ $pageTitle }}</span></div>
+                <div class="akd-account"><a href="{{ route('profile') }}" class="akd-account-link" @if(request()->routeIs('profile')) aria-current="page" @endif><span class="akd-user-name">{{ Auth::user()->fullName }}</span><small>{{ $roleLabel }} · Profil</small></a><button class="akd-icon-button" type="button" data-toggle="modal" data-target="#logoutModal" aria-label="Keluar dari akun"><i class="fas fa-sign-out-alt" aria-hidden="true"></i></button></div>
+            </header>
+            <main class="akd-main" id="dashboard-main" tabindex="-1">@yield('main-content')</main>
+            <footer class="akd-footer">&copy; {{ now()->year }} Arenaku <span>Pengelolaan tempat dan waktu main.</span></footer>
         </div>
     </div>
-
-    <!-- Scripts -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logout-title" aria-hidden="true">
+        <div class="modal-dialog" role="document"><div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title h5" id="logout-title">Keluar dari Arenaku?</h2><button class="close" type="button" data-dismiss="modal" aria-label="Tutup"><span aria-hidden="true">&times;</span></button></div>
+            <div class="modal-body">Sesi pengelolaan akan diakhiri. Kamu dapat masuk kembali untuk melanjutkan.</div>
+            <div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button><form action="{{ route('logout') }}" method="POST">@csrf<button class="btn btn-primary" type="submit">Keluar</button></form></div>
+        </div></div>
+    </div>
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
-    <!-- Page level plugins -->
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-
-    <!-- Page level custom scripts -->
     <script src="{{ asset('js/demo/datatables-demo.js') }}"></script>
+    <script src="{{ asset('js/arenaku-dashboard.js') }}"></script>
 </body>
-
 </html>
