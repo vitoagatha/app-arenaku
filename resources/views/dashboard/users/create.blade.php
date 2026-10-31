@@ -1,87 +1,18 @@
 @extends('layouts.admin')
-
 @section('main-content')
-    <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">{{ __('Pengguna') }}</h1>
-
-    @if (session('success'))
-        <div class="alert alert-success border-left-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @elseif (session('error'))
-        <div class="alert alert-danger border-left-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-
-    @if (session('status'))
-        <div class="alert alert-success border-left-success" role="alert">
-            {{ session('status') }}
-        </div>
-    @endif
-
-    <div class="row">
-        <div class="col-xl-12 col-md-12 mb-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Form Tambah Pengguna</h6>
-                    <a href="{{ route('users.index') }}" class="btn btn-secondary btn-sm">Kembali</a>
-                </div>
-                <div class="card-body">
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
-                    <form action="{{ route('users.store') }}" method="POST">
-                        @csrf
-                        <div class="form-group">
-                            <label for="name">Nama</label>
-                            <input type="text" class="form-control" id="name" name="name"
-                                value="{{ old('name') }}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="last_name">Nama Belakang</label>
-                            <input type="text" class="form-control" id="last_name" name="last_name"
-                                value="{{ old('last_name') }}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email"
-                                value="{{ old('email') }}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="no_handphone">No Handphone</label>
-                            <input type="number" class="form-control" id="no_handphone" name="no_handphone"
-                                value="{{ old('no_handphone') }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="role">Role</label>
-                            <select class="form-control" id="role" name="role">
-                                <option value="admin">Admin</option>
-                                <option value="penjaga">Penjaga</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                        <a href="{{ route('users.index') }}" class="btn btn-secondary">Batal</a>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="akd-management">
+<div class="akd-page-heading"><a class="akd-back" href="{{ route('users.index') }}">Kembali ke daftar</a><h1>Tambah pengguna</h1><p>Lengkapi informasi berikut. Isian wajib ditandai pada label.</p></div>
+@include('components.dashboard.feedback')
+<form class="akd-surface akd-management-form" action="{{ route('users.store') }}" method="POST" data-management-submit>
+    @csrf
+    @include('components.dashboard.field', ['name' => 'name', 'label' => 'Nama depan', 'value' => '', 'type' => 'text', 'required' => true])
+    @include('components.dashboard.field', ['name' => 'last_name', 'label' => 'Nama belakang', 'value' => '', 'type' => 'text', 'required' => true])
+    @include('components.dashboard.field', ['name' => 'email', 'label' => 'Alamat email', 'value' => '', 'type' => 'email', 'required' => true])
+    @include('components.dashboard.field', ['name' => 'password', 'label' => 'Kata sandi', 'value' => '', 'type' => 'password', 'required' => true, 'autocomplete' => 'new-password'])
+<p class="akd-muted">Kata sandi minimal 8 karakter.</p>
+    @include('components.dashboard.field', ['name' => 'no_handphone', 'label' => 'Nomor handphone', 'value' => '', 'type' => 'tel', 'required' => false])
+    @include('components.dashboard.field', ['name' => 'role', 'label' => 'Peran', 'value' => 'admin', 'type' => 'select', 'required' => true, 'options' => ['admin' => 'Admin', 'penjaga' => 'Penjaga']])
+    <div class="akd-form-actions"><button class="akd-button" type="submit">Simpan data</button><a href="{{ route('users.index') }}">Batal</a><span role="status" data-management-status></span></div>
+</form>
+</div>
 @endsection

@@ -1,51 +1,30 @@
 @extends('layouts.admin')
 
 @section('main-content')
-    <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">{{ __('Booking') }}</h1>
-
-    @if (session('success'))
-        <div class="alert alert-success border-left-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @elseif (session('error'))
-        <div class="alert alert-danger border-left-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-
-    @if (session('status'))
-        <div class="alert alert-success border-left-success" role="alert">
-            {{ session('status') }}
-        </div>
-    @endif
-
-    <div class="row">
+<div class="akd-management">
+<div class="akd-page-heading"><h1>Daftar booking</h1><p>Periksa data pemesan, lapangan, dan waktu booking.</p></div>
+@include('components.dashboard.feedback')
+@if($bookings->isEmpty())<p class="akd-note" role="status">Belum ada data pada daftar ini.</p>@endif
+<div class="row">
         <div class="col-xl-12 col-md-12 mb-4">
-            <div class="card shadow mb-4">
+            <div class="card akd-management-panel mb-4">
                 <div class="card-header py-3 d-flex justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Daftar Booking</h6>
+                    <h2 class="m-0 font-weight-bold text-primary">Daftar Booking</h2>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
+                    <p class="akd-muted">Cari data atau geser tabel ke samping pada layar kecil.</p><div class="table-responsive" role="region" aria-label="Daftar booking" tabindex="0">
+                        <table class="table akd-table" id="dataTable" width="100%" cellspacing="0">
+                            <caption class="sr-only">Daftar booking</caption><thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Nama</th>
-                                    <th>Nomor WhatsApp</th>
-                                    <th>Durasi</th>
-                                    <th>Lapangan</th>
-                                    <th>Court</th>
-                                    <th>Jam</th>
-                                    <th>Tanggal</th>
-                                    <th>Aksi</th>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Nama</th>
+                                    <th scope="col">Nomor WhatsApp</th>
+                                    <th scope="col">Durasi</th>
+                                    <th scope="col">Lapangan</th>
+                                    <th scope="col">Court</th>
+                                    <th scope="col">Jam</th>
+                                    <th scope="col">Tanggal</th>
+                                    <th scope="col">Status</th><th scope="col">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -60,16 +39,11 @@
                                         <td>{{ $booking->jadwalLapangan->court->nama_courts }}</td>
                                         <td>{{ $booking->jadwalLapangan->jam_awal }} -
                                             {{ $booking->jadwalLapangan->jam_akhir }}</td>
-                                        <td>{{ $booking->jadwalLapangan->tanggal }}</td>
-                                        <td>
+                                        <td data-order="{{ $booking->jadwalLapangan->tanggal }}">{{ \Carbon\Carbon::parse($booking->jadwalLapangan->tanggal)->locale('id')->translatedFormat('j M Y') }}</td>
+                                        <td>@include('components.dashboard.status', ['status' => $booking->status, 'kind' => 'booking'])</td><td>
                                             <a href="{{ route('booking.edit', ['booking' => $booking->id]) }}"
-                                                class="btn btn-primary btn-sm">Edit</a>
-                                            <form action="{{ route('booking.destroy', ['booking' => $booking->id]) }}"
-                                                method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                                            </form>
+                                                class="btn btn-primary btn-sm" aria-label="Edit {{ $booking->nama }}">Edit</a>
+                                            @include('components.dashboard.delete-action', ['action' => route('booking.destroy', $booking->id), 'label' => $booking->nama])
                                         </td>
                                     </tr>
                                 @endforeach
@@ -80,4 +54,5 @@
             </div>
         </div>
     </div>
+</div>
 @endsection
