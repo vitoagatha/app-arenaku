@@ -1,51 +1,19 @@
 @extends('layouts.cms')
-
+@section('courtside', 'booking')
+@section('title', 'Booking tercatat | Arenaku')
 @section('content')
-    <main id="main">
-        <section id="about" class="about" style="padding-top: 100px">
-            <div class="container mt-3">
-                <div class="row">
-                    <div class="col-lg-6 pt-3">
-                        <img src="{{ asset('storage/' . $lapangan->image) }}" class="img-fluid rounded" alt="Lapangan Image">
-                    </div>
-
-                    <div class="col-lg-6 pt-3 content">
-                        <h3>{{ $lapangan->nama_lapangan }}</h3>
-                        <p class="fst-italic">
-                            {{ $lapangan->alamat }}
-                        </p>
-                        <p>
-                            {{ $lapangan->deskripsi }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="about">
-            <div class="container mb-5">
-                <div class="row">
-                    <div class="col-12 p-3">
-                        <div class="card mt-3">
-                            <div class="card-header h3 fw-bold text-center">Booking Sukses</div>
-                            <div class="card-body m-5">
-                                <div class="row">
-                                    <div class="col-12 text-center">
-                                        <h5 class="card-title fw-bold">{{ $jadwal->court->nama_courts }}</h5>
-                                        <p class="card-text">
-                                            Jam : {{ $jadwal->jam_awal }} - {{ $jadwal->jam_akhir }} <br>
-                                            Tanggal : {{ $jadwal->tanggal }} <br>
-                                            Durasi : {{ $konfirmasiBooking->durasi }} Jam <br>
-                                            Nama : {{ $konfirmasiBooking->nama }} <br>
-                                            Nomor WhatsApp : {{ $konfirmasiBooking->no_whatsapp }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+<main id="main" class="ak-container ak-booking-page ak-result-page" tabindex="-1">
+    @include('components.arenaku.booking-progress', ['step' => 3])
+    <section class="ak-panel" aria-labelledby="result-title">
+        <div class="ak-result-message" role="status"><i class="bi bi-check2-circle" aria-hidden="true"></i><h1 id="result-title">Booking berhasil dicatat</h1><p>Data bookingmu sudah tersimpan. Pencatatan ini bukan bukti pembayaran atau persetujuan booking.</p></div>
+        <h2>Ringkasan booking</h2>
+        @include('components.arenaku.booking-summary')
+        <dl class="ak-summary">
+            <div><dt>Nama pemesan</dt><dd>{{ $konfirmasiBooking->nama }}</dd></div>
+            <div><dt>Nomor WhatsApp</dt><dd>{{ $konfirmasiBooking->no_whatsapp }}</dd></div>
+            <div><dt>Durasi</dt><dd>{{ $konfirmasiBooking->durasi }} jam</dd></div>
+        </dl>
+        <a class="ak-button" href="{{ route('/') }}#hasil-lapangan">Kembali ke daftar lapangan</a>
+    </section>
+</main>
 @endsection

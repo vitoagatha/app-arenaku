@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Arenaku</title>
+    <title>@yield('title', 'Arenaku')</title>
     <meta name="description" content="Temukan lapangan olahraga, lihat jadwal sesuai tanggal pilihanmu, dan mulai booking di Arenaku.">
     <link rel="icon" type="image/jpeg" href="{{ asset('assets/img/icon_arenaku.jpg') }}">
     <link rel="apple-touch-icon" href="{{ asset('assets/img/icon_arenaku.jpg') }}">
@@ -19,14 +19,14 @@
     <header class="ak-header">
         <div class="ak-container ak-header-inner">
             <a class="ak-brand" href="{{ route('/') }}" aria-label="Arenaku, beranda"><img class="ak-brand-image" src="{{ asset('assets/img/logo_arenaku.jpg') }}" alt="Arenaku" width="3656" height="2680"></a>
-            <nav class="ak-nav" aria-label="Navigasi utama"><a href="#hasil-lapangan">Cari lapangan</a><a class="ak-nav-login" href="{{ route('login') }}">Masuk <span class="ak-desktop-label">pengelola</span><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i></a></nav>
+            <nav class="ak-nav" aria-label="Navigasi utama"><a href="{{ route('/') }}#hasil-lapangan">Cari lapangan</a><a class="ak-nav-login" href="{{ route('login') }}">Masuk <span class="ak-desktop-label">pengelola</span><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i></a></nav>
         </div>
     </header>
     @yield('content')
     <footer class="ak-footer">
         <div class="ak-container ak-footer-inner">
             <div><a class="ak-brand" href="{{ route('/') }}" aria-label="Arenaku, beranda"><img class="ak-brand-image" src="{{ asset('assets/img/logo_arenaku.jpg') }}" alt="Arenaku" width="3656" height="2680" loading="lazy"></a><p>Temukan tempatnya. Tentukan waktu mainmu.</p></div>
-            <nav aria-label="Navigasi footer"><a href="#hasil-lapangan">Jelajahi lapangan</a><a href="{{ route('login') }}">Masuk pengelola</a></nav>
+            <nav aria-label="Navigasi footer"><a href="{{ route('/') }}#hasil-lapangan">Jelajahi lapangan</a><a href="{{ route('login') }}">Masuk pengelola</a></nav>
             <small>&copy; {{ now()->year }} Arenaku</small>
         </div>
     </footer>
