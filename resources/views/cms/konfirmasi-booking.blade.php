@@ -1,70 +1,47 @@
 @extends('layouts.cms')
-
+@section('courtside', 'booking')
+@section('title', 'Isi data booking | Arenaku')
 @section('content')
-    <main id="main">
-        <section id="about" class="about" style="padding-top: 100px">
-            <div class="container mt-3">
-                <div class="row">
-                    <div class="col-lg-6 pt-3">
-                        <img src="{{ asset('storage/' . $lapangan->image) }}" class="img-fluid rounded" alt="Lapangan Image">
-                    </div>
-
-                    <div class="col-lg-6 pt-3 content">
-                        <h3>{{ $lapangan->nama_lapangan }}</h3>
-                        <p class="fst-italic">
-                            {{ $lapangan->alamat }}
-                        </p>
-                        <p>
-                            {{ $lapangan->deskripsi }}
-                        </p>
-                    </div>
-                </div>
-            </div>
+<main id="main" class="ak-container ak-booking-page" tabindex="-1">
+    <a class="ak-back" href="{{ route('cms.cek-booking', ['lapangan' => $lapangan->id, 'tanggal' => $jadwal->tanggal]) }}"><i class="bi bi-arrow-left" aria-hidden="true"></i>Kembali ke pilihan tanggal</a>
+    @include('components.arenaku.booking-progress', ['step' => 2])
+    <h1>Isi data booking</h1>
+    <p class="ak-muted">Periksa jadwal pilihanmu, lalu lengkapi data pemesan.</p>
+    <div class="ak-booking-grid">
+        <section class="ak-panel" aria-labelledby="summary-title">
+            <h2 id="summary-title">Jadwal pilihanmu</h2>
+            @include('components.arenaku.booking-summary')
+            <p class="ak-location"><i class="bi bi-geo-alt" aria-hidden="true"></i><span>{{ $lapangan->alamat }}</span></p>
         </section>
-
-        <div class="about">
-            <div class="container mb-5">
-                <div class="row">
-                    <div class="col-12 p-3">
-                        <div class="card mt-3">
-                            <div class="card-header h3 fw-bold text-center">Konfirmasi Booking</div>
-                            <div class="card-body m-5">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <form action="{{ route('booking.store') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="jadwal_lapangan_id" value="{{ $jadwal->id }}">
-                                            <div class="mb-3">
-                                                <label for="nama" class="form-label">Nama</label>
-                                                <input type="text" class="form-control" id="nama" name="nama"
-                                                    autocomplete="off" placeholder="Atas nama ?" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="no_whatsapp" class="form-label">Nomor WhatsApp</label>
-                                                <input type="number" class="form-control" id="no_whatsapp"
-                                                    name="no_whatsapp" placeholder="Nomor" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="durasi" class="form-label">Durasi (Jam)</label>
-                                                <input type="number" class="form-control" id="durasi" name="durasi"
-                                                    placeholder="Jam" required>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Pesan!</button>
-                                        </form>
-                                    </div>
-                                    <div class="col-6">
-                                        <h5 class="card-title fw-bold">{{ $jadwal->court->nama_courts }}</h5>
-                                        <p class="card-text">
-                                            Jam : {{ $jadwal->jam_awal }} - {{ $jadwal->jam_akhir }} <br>
-                                            Tanggal : {{ $jadwal->tanggal }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <section class="ak-panel" aria-labelledby="customer-title">
+            <h2 id="customer-title">Data pemesan</h2>
+            <p class="ak-muted">Semua isian wajib diisi.</p>
+            @include('components.arenaku.form-errors')
+            <form class="ak-form" action="{{ route('booking.store') }}" method="POST" data-submit-feedback>
+                @csrf
+                <input type="hidden" name="jadwal_lapangan_id" id="jadwal_lapangan_id" value="{{ $jadwal->id }}">
+                @error('jadwal_lapangan_id')<p class="ak-field-error">{{ $message }}</p>@enderror
+                <div class="ak-field">
+                    <label for="nama">Nama pemesan (wajib)</label>
+                    <input type="text" id="nama" name="nama" value="{{ old('nama') }}" autocomplete="name" required @error('nama') aria-invalid="true" aria-describedby="nama-error" @enderror>
+                    @error('nama')<p class="ak-field-error" id="nama-error">{{ $message }}</p>@enderror
                 </div>
-            </div>
-        </div>
-    </main>
+                <div class="ak-field">
+                    <label for="no_whatsapp">Nomor WhatsApp (wajib)</label>
+                    <input type="tel" id="no_whatsapp" name="no_whatsapp" value="{{ old('no_whatsapp') }}" autocomplete="tel" inputmode="tel" required aria-describedby="whatsapp-help @error('no_whatsapp') no_whatsapp-error @enderror" @error('no_whatsapp') aria-invalid="true" @enderror>
+                    <p id="whatsapp-help" class="ak-help">Gunakan nomor WhatsApp yang dapat dihubungi.</p>
+                    @error('no_whatsapp')<p class="ak-field-error" id="no_whatsapp-error">{{ $message }}</p>@enderror
+                </div>
+                <div class="ak-field">
+                    <label for="durasi">Durasi dalam jam (wajib)</label>
+                    <input type="number" id="durasi" name="durasi" value="{{ old('durasi') }}" required @error('durasi') aria-invalid="true" aria-describedby="durasi-error" @enderror>
+                    @error('durasi')<p class="ak-field-error" id="durasi-error">{{ $message }}</p>@enderror
+                </div>
+                <p class="ak-help">Periksa nama, nomor WhatsApp, dan jadwal sebelum mengirim booking.</p>
+                <button class="ak-button" type="submit" data-loading-label="Mengirim booking…">Kirim booking</button>
+                <span class="ak-submit-status" role="status" aria-live="polite"></span>
+            </form>
+        </section>
+    </div>
+</main>
 @endsection

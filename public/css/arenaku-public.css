@@ -1,4 +1,4 @@
-/* Courtside foundation. Loaded only by the public discovery layout. */
+/* Courtside foundation shared by public discovery and booking pages. */
 .ak-public {
     --ak-green: #245d4c;
     --ak-green-hover: #194736;
@@ -121,3 +121,66 @@
     .ak-footer-inner { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; }
 }
 @media (prefers-reduced-motion: reduce) { .ak-public *, .ak-public *::before, .ak-public *::after { transition: none !important; scroll-behavior: auto !important; } }
+
+/* Booking journey: retain the discovery palette, type, controls and rhythm. */
+.ak-booking-page { padding-block: var(--ak-space-6) var(--ak-space-12); }
+.ak-booking-page h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: var(--ak-space-3); overflow-wrap: anywhere; }
+.ak-booking-page h2 { font-size: 1.75rem; margin-bottom: var(--ak-space-3); }
+.ak-booking-page h3 { font-size: 1.375rem; }
+.ak-muted { color: var(--ak-muted); }
+.ak-back { display: inline-flex; align-items: center; gap: var(--ak-space-2); min-height: 44px; margin-bottom: var(--ak-space-4); }
+.ak-progress { display: flex; flex-wrap: wrap; list-style: none; padding: 0; margin: 0 0 var(--ak-space-6); gap: var(--ak-space-3) var(--ak-space-6); color: var(--ak-muted); font-size: .875rem; }
+.ak-progress li { display: flex; align-items: center; gap: var(--ak-space-2); }
+.ak-progress li > span { display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid var(--ak-input-border); border-radius: 50%; font-variant-numeric: tabular-nums; }
+.ak-progress [aria-current] { color: var(--ak-green); font-weight: 700; }
+.ak-progress [aria-current] > span { background: var(--ak-green); border-color: var(--ak-green); color: var(--ak-white); }
+.ak-venue-detail { display: grid; gap: var(--ak-space-6); margin-bottom: var(--ak-space-6); }
+.ak-detail-photo { background: var(--ak-border); border-radius: var(--ak-radius-surface); overflow: hidden; aspect-ratio: 2; }
+.ak-detail-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ak-description { margin-top: var(--ak-space-4); }
+.ak-description summary { padding-block: var(--ak-space-3); min-height: 44px; color: var(--ak-green); font-weight: 600; cursor: pointer; }
+.ak-description p { max-width: 68ch; white-space: pre-line; overflow-wrap: anywhere; }
+.ak-public summary:focus-visible { outline: 3px solid var(--ak-green); outline-offset: 4px; }
+.ak-panel { padding: var(--ak-space-6); border: 1px solid var(--ak-border); border-radius: var(--ak-radius-surface); background: var(--ak-white); min-width: 0; }
+.ak-form { display: grid; gap: var(--ak-space-6); margin-top: var(--ak-space-6); }
+.ak-form label { display: block; margin-bottom: var(--ak-space-2); font-weight: 600; }
+.ak-field { min-width: 0; }
+.ak-form input:not([type="hidden"]) { min-width: 0; width: 100%; min-height: 48px; padding: .625rem .75rem; border: 1px solid var(--ak-input-border); border-radius: var(--ak-radius-control); background: var(--ak-white); color: var(--ak-ink); font: inherit; }
+.ak-form input[aria-invalid="true"] { border: 2px solid var(--ak-orange); }
+.ak-field-error { color: var(--ak-orange); margin-top: var(--ak-space-2) !important; }
+.ak-error-summary { padding: var(--ak-space-4); border-left: 4px solid var(--ak-orange); margin-block: var(--ak-space-6); background: var(--ak-mist); }
+.ak-error-summary h2 { font-size: 1.375rem; }
+.ak-error-summary ul { margin: 0; padding-left: var(--ak-space-6); }
+.ak-error-summary a { display: inline-block; padding-block: var(--ak-space-2); }
+.ak-error-summary:focus { outline: 3px solid var(--ak-green); outline-offset: 4px; }
+.ak-submit-status:empty { display: none; }
+.ak-submit-status { color: var(--ak-muted); }
+.ak-schedules { margin-top: var(--ak-space-8); scroll-margin-top: var(--ak-space-6); }
+.ak-court { padding-block: var(--ak-space-6); border-top: 1px solid var(--ak-border); }
+.ak-slot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: var(--ak-space-3); padding: 0; margin: var(--ak-space-4) 0 0; list-style: none; }
+.ak-slot { display: flex; flex-direction: column; gap: var(--ak-space-2); padding: var(--ak-space-4); border: 1px solid var(--ak-border); border-radius: var(--ak-radius-control); height: 100%; font-variant-numeric: tabular-nums; text-decoration: none; }
+.ak-slot strong { font-weight: 600; }
+.ak-slot span { font-size: .875rem; }
+.ak-slot-ready { color: var(--ak-green); background: var(--ak-white); border-color: var(--ak-green); transition: background-color var(--ak-motion); }
+.ak-slot-ready:hover { background: var(--ak-mist); text-decoration: underline; }
+.ak-slot-ready:active { background: var(--ak-border); }
+.ak-slot-unavailable { color: var(--ak-muted); border-style: dashed; }
+.ak-notice { margin-top: var(--ak-space-4) !important; padding: var(--ak-space-4); border-left: 3px solid var(--ak-orange); }
+.ak-booking-grid { display: grid; gap: var(--ak-space-6); margin-top: var(--ak-space-6); align-items: start; }
+.ak-summary { margin-block: var(--ak-space-6); }
+.ak-summary > div { padding-block: var(--ak-space-3); border-bottom: 1px solid var(--ak-border); }
+.ak-summary dt { font-weight: 400; color: var(--ak-muted); }
+.ak-summary dd { margin: var(--ak-space-1) 0 0; font-weight: 600; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.ak-result-page { max-width: 850px; }
+.ak-result-message { margin-bottom: var(--ak-space-8); }
+.ak-result-message > i { display: block; color: var(--ak-green); font-size: 2rem; margin-bottom: var(--ak-space-4); }
+.ak-result-message p { max-width: 64ch; color: var(--ak-muted); }
+@media (min-width: 768px) {
+    .ak-venue-detail { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); align-items: start; }
+    .ak-detail-photo { aspect-ratio: 1.5; }
+    .ak-date-form { grid-template-columns: minmax(0, 320px) auto; align-items: start; justify-content: start; }
+    .ak-date-form > .ak-button { margin-top: 33px; }
+    .ak-booking-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
+    .ak-summary > div { display: grid; grid-template-columns: minmax(100px, 1fr) minmax(0, 2fr); gap: var(--ak-space-4); }
+    .ak-summary dd { margin-top: 0; }
+}
