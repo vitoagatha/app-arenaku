@@ -1,52 +1,23 @@
-@extends('layouts.auth')
-
+@extends('layouts.login')
 @section('main-content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-10 col-lg-12 col-md-9">
-                <div class="card o-hidden border-0 shadow-lg my-5">
-                    <div class="card-body p-0">
-                        <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                            <div class="col-lg-6">
-                                <div class="p-5">
-                                    <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">{{ __('Login') }}</h1>
-                                    </div>
-
-                                    @if ($errors->any())
-                                        <div class="alert alert-danger border-left-danger" role="alert">
-                                            <ul class="pl-4 my-2">
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
-
-                                    <form method="POST" action="{{ route('login') }}" class="user">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <div class="form-group">
-                                            <input type="email" class="form-control form-control-user" name="email"
-                                                placeholder="{{ __('E-Mail Address') }}" value="{{ old('email') }}"
-                                                required autofocus>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control form-control-user" name="password"
-                                                placeholder="{{ __('Password') }}" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-primary btn-user btn-block">
-                                                {{ __('Login') }}
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="ak-login-panel">
+    @include('components.auth.visual')
+    <section class="ak-login-form-section akd-management" aria-labelledby="login-title">
+        <h1 id="login-title">Masuk pengelola</h1>
+        <p class="akd-muted">Gunakan akun admin atau penjaga untuk membuka dashboard Arenaku.</p>
+        @if($errors->any())
+            <div class="akd-errors" role="alert" tabindex="-1" data-login-errors><h2>Belum berhasil masuk</h2><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
+        @endif
+        @if(session('status'))<p class="akd-note" role="status">{{ session('status') }}</p>@endif
+        <form action="{{ route('login') }}" method="POST" data-login-form>
+            @csrf
+            <div class="form-group"><label for="email">Alamat email</label><input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" autocomplete="username" spellcheck="false" placeholder="nama@contoh.com" required @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>@error('email')<p class="akd-field-error" id="email-error">{{ $message }}</p>@enderror</div>
+            <div class="form-group"><label for="password">Kata sandi</label><div class="ak-login-password"><input type="password" class="form-control" id="password" name="password" autocomplete="current-password" required @error('password') aria-invalid="true" aria-describedby="password-error" @enderror><button class="ak-login-reveal" type="button" aria-controls="password" aria-pressed="false" data-password-toggle hidden>Tampilkan</button></div>@error('password')<p class="akd-field-error" id="password-error">{{ $message }}</p>@enderror</div>
+            @if(Route::has('password.request'))<a class="ak-login-forgot" href="{{ route('password.request') }}">Lupa kata sandi?</a>@endif
+            <button class="akd-button ak-login-submit" type="submit">Masuk ke dashboard</button>
+            <p class="ak-login-status" role="status" aria-live="polite" data-login-status></p>
+        </form>
+        <p class="ak-login-help">Untuk mengakses pengelolaan lapangan, gunakan akun yang sudah terdaftar.</p>
+    </section>
+</div>
 @endsection

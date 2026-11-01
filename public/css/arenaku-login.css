@@ -1,0 +1,36 @@
+/* Login extends the compact Courtside dashboard tokens and Bootstrap 4 controls. */
+.ak-login { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+.ak-login-header { width: min(100% - 2rem, 1080px); margin-inline: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; padding-block: 1rem; }
+.ak-login-back { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
+.ak-login-main { flex: 1; display: grid; align-content: center; width: min(100% - 2rem, 520px); margin: 1rem auto 2rem; }
+.ak-login-panel { background: var(--ak-white); border: 1px solid var(--ak-border); border-radius: var(--ak-radius-surface); overflow: hidden; }
+.ak-login-visual { display: none; }
+.ak-login-form-section { width: 100%; max-width: 480px; margin-inline: auto; padding: 1.5rem; }
+.ak-login-form-section h1 { font-size: 2rem; margin: 0 0 .75rem; }
+.ak-login-form-section form { margin-top: 1.5rem; }
+.ak-login-form-section .form-group { margin-bottom: 1.125rem; }
+.ak-login-form-section .akd-errors { padding: 1rem; background: var(--ak-mist); margin-top: 1rem; }
+.ak-login-form-section .akd-errors h2 { font-size: 1.25rem; }
+.ak-login-form-section .akd-errors ul { padding-left: 1.125rem; margin: 0; }
+.ak-login-password { position: relative; }
+.ak-login-password:has(.ak-login-reveal:not([hidden])) input { padding-right: 6.5rem; }
+.ak-login-reveal { position: absolute; top: 0; right: 0; height: 100%; min-width: 88px; padding: .5rem; background: transparent; color: var(--ak-green); border: 0; border-left: 1px solid var(--ak-border); border-radius: 0 var(--ak-radius-control) var(--ak-radius-control) 0; font: 600 .875rem var(--ak-font-body); }
+.ak-login-reveal:hover { background: var(--ak-mist); }
+.ak-login-forgot { display: flex; align-items: center; justify-content: flex-end; min-height: 44px; margin-bottom: .75rem; }
+.ak-login-submit { width: 100%; }
+.ak-login-status { color: var(--ak-muted); margin: .75rem 0 0; }
+.ak-login-status:empty { display: none; }
+.ak-login-help { font-size: .875rem; color: var(--ak-muted); border-top: 1px solid var(--ak-border); padding-top: 1rem; margin: 1.5rem 0 0; }
+.ak-login-return { display: inline-flex; align-items: center; min-height: 44px; }
+.ak-login-footer { color: var(--ak-muted); text-align: center; padding: 1rem; font-size: .875rem; }
+@media (min-width: 768px) { .ak-login-form-section { padding: 2rem; } }
+@media (min-width: 992px) {
+    .ak-login-main { width: min(100% - 2rem, 960px); }
+    .ak-login-panel { display: grid; grid-template-columns: .95fr 1fr; }
+    .ak-login-form-section { padding: 2.5rem 2rem; }
+    .ak-login-visual { display: flex; flex-direction: column; justify-content: flex-end; position: relative; min-height: 490px; background: var(--ak-green); color: var(--ak-white); }
+    .ak-login-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .ak-login-visual > div { position: relative; padding: 1.5rem; background: var(--ak-green); }
+    .ak-login-visual h2 { color: var(--ak-white); font-size: 2rem; margin-bottom: .75rem; }
+    .ak-login-visual p { margin: 0; max-width: 35ch; }
+}

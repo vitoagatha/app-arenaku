@@ -1,0 +1,1 @@
+<aside class="ak-login-visual" aria-label="Pengelolaan lapangan Arenaku"><img src="{{ url('assets/img/hero-bg.jpg') }}" alt="Lapangan bulu tangkis indoor dengan net dan garis lapangan" width="1600" height="960"><div><h2>Siapkan tempat.<br>Atur waktu main.</h2><p>Ruang kerja pengelola lapangan, jadwal, dan booking.</p></div></aside>
