@@ -112,6 +112,15 @@ if (schedulePage) {
     const modal = modalId ? document.getElementById(modalId) : null;
     if (schedulePage.dataset.hasErrors === 'true' && modal) {
         const oldValues = JSON.parse(schedulePage.dataset.oldValues || '{}');
+        // Validation belongs to the submitted modal, not every repeated form.
+        document.querySelectorAll('[data-schedule-form]').forEach(form => {
+            if (form.closest('.modal') === modal) return;
+            form.querySelectorAll('[aria-invalid]').forEach(field => {
+                field.removeAttribute('aria-invalid');
+                field.removeAttribute('aria-describedby');
+            });
+            form.querySelectorAll('.akd-field-error').forEach(error => error.remove());
+        });
         modal.querySelectorAll('input:not([type="hidden"]), select').forEach(field => {
             if (Object.prototype.hasOwnProperty.call(oldValues, field.name)) field.value = oldValues[field.name];
         });

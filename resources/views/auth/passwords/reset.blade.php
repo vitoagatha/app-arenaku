@@ -1,58 +1,23 @@
-@extends('layouts.auth')
-
+@extends('layouts.login')
+@section('title', 'Reset kata sandi | Arenaku')
+@section('description', 'Buat kata sandi baru untuk memulihkan akses akun pengelola Arenaku.')
 @section('main-content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-xl-10 col-lg-12 col-md-9">
-            <div class="card o-hidden border-0 shadow-lg my-5">
-                <div class="card-body p-0">
-                    <div class="row">
-                        <div class="col-lg-6 d-none d-lg-block bg-password-image"></div>
-                        <div class="col-lg-6">
-                            <div class="p-5">
-                                <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-4">{{ __('Reset Password') }}</h1>
-                                </div>
-
-                                @if ($errors->any())
-                                    <div class="alert alert-danger border-left-danger" role="alert">
-                                        <ul class="pl-4 my-2">
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
-
-                                <form method="POST" action="{{ route('password.update') }}" class="user">
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-                                    <input type="hidden" name="token" value="{{ $token }}">
-
-                                    <div class="form-group">
-                                        <input type="email" class="form-control form-control-user" name="email" placeholder="{{ __('E-Mail Address') }}" value="{{ $email ?? old('email') }}" required autofocus>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input type="password" class="form-control form-control-user" name="password" placeholder="{{ __('Password') }}" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input type="password" class="form-control form-control-user" name="password_confirmation" placeholder="{{ __('Confirm Password') }}" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-primary btn-user btn-block">
-                                            {{ __('Reset Password') }}
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="ak-login-panel">
+    @include('components.auth.visual')
+    <section class="ak-login-form-section akd-management" aria-labelledby="reset-title">
+        <h1 id="reset-title">Buat kata sandi baru</h1>
+        <p class="akd-muted">Isi alamat email akunmu, lalu masukkan kata sandi baru dua kali.</p>
+        @include('components.auth.feedback')
+        <form method="POST" action="{{ route('password.update') }}" data-login-form data-loading-label="Menyimpan kata sandi…" data-loading-status="Sedang memproses perubahan kata sandi.">
+            @csrf
+            <input type="hidden" name="token" value="{{ $token }}">
+            <div class="form-group"><label for="email">Alamat email</label><input type="email" class="form-control" id="email" name="email" value="{{ old('email', $email ?? '') }}" autocomplete="email" spellcheck="false" placeholder="nama@contoh.com" required @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>@error('email')<p class="akd-field-error" id="email-error">{{ $message }}</p>@enderror</div>
+            <div class="form-group"><label for="password">Kata sandi baru</label><div class="ak-login-password"><input type="password" class="form-control" id="password" name="password" autocomplete="new-password" required @error('password') aria-invalid="true" aria-describedby="password-error" @enderror><button class="ak-login-reveal" type="button" aria-controls="password" aria-pressed="false" data-password-toggle hidden>Tampilkan</button></div>@error('password')<p class="akd-field-error" id="password-error">{{ $message }}</p>@enderror</div>
+            <div class="form-group"><label for="password_confirmation">Ulangi kata sandi baru</label><div class="ak-login-password"><input type="password" class="form-control" id="password_confirmation" name="password_confirmation" autocomplete="new-password" required @error('password_confirmation') aria-invalid="true" aria-describedby="password_confirmation-error" @enderror><button class="ak-login-reveal" type="button" aria-controls="password_confirmation" aria-pressed="false" data-password-toggle hidden>Tampilkan</button></div>@error('password_confirmation')<p class="akd-field-error" id="password_confirmation-error">{{ $message }}</p>@enderror</div>
+            <button type="submit" class="akd-button ak-login-submit">Simpan kata sandi baru</button>
+            <p class="ak-login-status" role="status" aria-live="polite" data-login-status></p>
+        </form>
+        <p class="ak-login-help"><a class="ak-login-return" href="{{ route('login') }}">Kembali ke halaman masuk</a></p>
+    </section>
 </div>
 @endsection
