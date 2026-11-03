@@ -47,6 +47,23 @@
     }
 })();
 
+// Bootstrap 4's focus enforcement can leave focus on the document at a Tab boundary.
+document.addEventListener('keydown', event => {
+    if (event.key !== 'Tab' || event.defaultPrevented) return;
+    const modal = document.querySelector('.modal.show');
+    if (!modal) return;
+    const controls = [...modal.querySelectorAll('a[href], button, input:not([type="hidden"]), select, textarea, [tabindex]')]
+        .filter(control => !control.disabled && control.tabIndex >= 0 && control.getClientRects().length > 0);
+    if (!controls.length) { event.preventDefault(); modal.focus(); return; }
+    const first = controls[0];
+    const last = controls[controls.length - 1];
+    if (!modal.contains(document.activeElement) || (!event.shiftKey && document.activeElement === last)) {
+        event.preventDefault(); first.focus();
+    } else if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault(); last.focus();
+    }
+});
+
 // Management tables redraw rows; delegate image recovery and deletion feedback.
 document.addEventListener('error', event => {
     const image = event.target;

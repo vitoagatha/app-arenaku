@@ -1,13 +1,6 @@
-/* Courtside tokens mirror public/css/arenaku-public.css. Bootstrap 4 adapter only;
+/* Courtside Bootstrap 4 adapter only;
    do not import the Bootstrap 5 public stylesheet into management pages. */
 .ak-dashboard {
-    --ak-green: #245d4c; --ak-green-hover: #194736; --ak-green-active: #12382a;
-    --ak-ink: #263e35; --ak-muted: #53675e; --ak-mist: #f3f6f3;
-    --ak-white: #fff; --ak-border: #cbd8d0; --ak-input-border: #788b80; --ak-orange: #a54728;
-    --ak-radius-control: .375rem; --ak-radius-surface: .75rem;
-    --ak-space-1: .25rem; --ak-space-2: .5rem; --ak-space-3: .75rem; --ak-space-4: 1rem;
-    --ak-space-6: 1.5rem; --ak-space-8: 2rem; --ak-space-12: 3rem;
-    --ak-font-body: 'Source Sans 3', sans-serif; --ak-font-heading: 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
     --ak-control-height: 40px; --ak-font-control: .9375rem; --ak-font-small: .875rem; --ak-panel-padding: 1.25rem;
     background: var(--ak-mist); color: var(--ak-ink); font: 400 .9375rem/1.5 var(--ak-font-body);
 }
@@ -117,7 +110,7 @@
 .akd-management .card-body { padding: var(--ak-panel-padding); }
 .akd-management .table-responsive { overscroll-behavior-inline: contain; }
 .akd-management .table-responsive:focus-visible { outline: 3px solid var(--ak-green); outline-offset: 3px; }
-.akd-table-scroll { max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; }
+.akd-table-scroll { position: relative; max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; }
 .akd-table-scroll:focus-visible { outline: 3px solid var(--ak-green); outline-offset: 3px; }
 .akd-table-controls, .akd-table-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 1rem; padding-block: .75rem; }
 .akd-table-controls > div, .akd-table-footer > div { min-width: 0; max-width: 100%; }
@@ -177,3 +170,10 @@
 @media (pointer: coarse), (max-width: 767px) {
     .ak-dashboard { --ak-control-height: 44px; --ak-font-control: 1rem; }
 }
+
+.akd-page-heading h1, .akd-panel-heading h2, .akd-task strong { overflow-wrap: anywhere; }
+.akd-venue-description { min-width: 12rem; max-width: 20rem; }
+.akd-venue-description summary { min-height: 44px; display: list-item; padding-block: .625rem; color: var(--ak-green); cursor: pointer; font-weight: 600; }
+.akd-venue-description summary:focus-visible { outline: 3px solid var(--ak-green); outline-offset: 3px; }
+.akd-venue-description[open] summary { margin-bottom: .5rem; }
+.akd-venue-description:not([open]) > .akd-cell-description { display: none; }

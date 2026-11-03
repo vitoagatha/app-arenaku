@@ -12,7 +12,7 @@ class LoginViewTest extends TestCase
     {
         $this->view('auth.login', ['errors' => new ViewErrorBag()])
             ->assertSee('arenaku-login.css')->assertSee('arenaku-dashboard.css')
-            ->assertSee('logo_arenaku.jpg')->assertSee('Masuk pengelola')
+            ->assertSee('logo_arenaku-640.webp')->assertSee('Masuk pengelola')
             ->assertSee(route('login'), false)->assertSee('method="POST"', false)
             ->assertSee('name="_token"', false)->assertSee('name="email"', false)->assertSee('name="password"', false)
             ->assertSee('autocomplete="current-password"', false)->assertSee('for="email"', false)

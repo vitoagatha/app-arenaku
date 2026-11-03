@@ -1,4 +1,5 @@
 @php
+    $hasTables = request()->routeIs('lapangan.index', 'courts.index', 'jadwal.*', 'booking.index', 'users.index');
     $isAdmin = Auth::user()->role === 'admin';
     $roleLabel = $isAdmin ? 'Admin' : ucfirst(Auth::user()->role);
     $pageTitle = request()->routeIs('profile*') ? 'Profil saya' : (request()->routeIs('home') ? 'Ringkasan' : (request()->routeIs('lapangan.*') ? 'Lapangan' : (request()->routeIs('courts.*') ? 'Court' : (request()->routeIs('jadwal.*') ? 'Jadwal lapangan' : (request()->routeIs('booking.*') ? 'Booking' : (request()->routeIs('users.*') ? 'Pengguna' : 'Pengelolaan'))))));
@@ -17,15 +18,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
+    @if($hasTables)
     <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/arenaku-dashboard.css') }}" rel="stylesheet">
+    @endif
+    <link href="{{ asset('css/arenaku-tokens.css') . '?v=' . filemtime(public_path('css/arenaku-tokens.css')) }}" rel="stylesheet">
+    <link href="{{ asset('css/arenaku-dashboard.css') . '?v=' . filemtime(public_path('css/arenaku-dashboard.css')) }}" rel="stylesheet">
 </head>
 <body class="ak-dashboard" id="page-top">
     <a href="#dashboard-main" class="akd-skip">Langsung ke konten</a>
     <div class="akd-shell">
         <aside class="akd-sidebar" id="dashboard-navigation" aria-label="Menu pengelolaan">
             <div class="akd-sidebar-brand">
-                <a class="akd-brand" href="{{ route('home') }}" aria-label="Arenaku, ringkasan"><img src="{{ asset('assets/img/logo_arenaku.jpg') }}" width="3656" height="2680" alt="Arenaku"></a>
+                <a class="akd-brand" href="{{ route('home') }}" aria-label="Arenaku, ringkasan"><img src="{{ asset('assets/img/logo_arenaku-640.webp') }}" width="640" height="469" alt="Arenaku"></a>
                 <button class="akd-icon-button akd-close" type="button" data-nav-close aria-label="Tutup navigasi"><i class="fas fa-times" aria-hidden="true"></i></button>
             </div>
             <p class="akd-sidebar-caption">Pengelolaan lapangan</p>
@@ -59,7 +63,7 @@
             <footer class="akd-footer">&copy; {{ now()->year }} Arenaku <span>Pengelolaan tempat dan waktu main.</span></footer>
         </div>
     </div>
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logout-title" aria-hidden="true">
+    <div class="modal fade akd-management" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logout-title" aria-hidden="true">
         <div class="modal-dialog" role="document"><div class="modal-content">
             <div class="modal-header"><h2 class="modal-title h5" id="logout-title">Keluar dari Arenaku?</h2><button class="close" type="button" data-dismiss="modal" aria-label="Tutup"><span aria-hidden="true">&times;</span></button></div>
             <div class="modal-body">Sesi pengelolaan akan diakhiri. Kamu dapat masuk kembali untuk melanjutkan.</div>
@@ -70,9 +74,11 @@
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+    @if($hasTables)
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/demo/datatables-demo.js') }}"></script>
-    <script src="{{ asset('js/arenaku-dashboard.js') }}"></script>
+    @endif
+    <script src="{{ asset('js/arenaku-dashboard.js') . '?v=' . filemtime(public_path('js/arenaku-dashboard.js')) }}"></script>
 </body>
 </html>

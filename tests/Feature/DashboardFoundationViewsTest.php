@@ -25,7 +25,7 @@ class DashboardFoundationViewsTest extends TestCase
             ->assertSee('Ringkasan pengelolaan')->assertSee('Lapangan terdaftar')->assertSee('Pengguna terdaftar')
             ->assertSee('<dd>12</dd>', false)->assertSee('<dd>23</dd>', false)
             ->assertSee(route('users.index'), false)->assertSee(route('courts.index'), false)
-            ->assertSee('aria-current="page"', false)->assertSee('dataTables.bootstrap4.min.js')
+            ->assertSee('aria-current="page"', false)->assertDontSee('dataTables.bootstrap4.min.js')
             ->assertDontSee('assets/vendor/bootstrap/js/bootstrap.bundle.min.js');
     }
 

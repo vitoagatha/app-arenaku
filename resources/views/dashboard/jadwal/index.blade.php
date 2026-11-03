@@ -31,7 +31,7 @@
                                         <td>{{ $no++ }}</td>
                                         <td>{{ $lapangan->nama_lapangan }}</td>
                                         <td>{{ $lapangan->alamat }}</td>
-                                        <td><div class="akd-cell-description">{{ $lapangan->deskripsi }}</div></td>
+                                        <td>@include('components.dashboard.venue-description')</td>
                                         <td>@include('components.dashboard.venue-image')</td>
                                         <td>
                                             <a href="{{ route('jadwal.court', $lapangan->id) }}"

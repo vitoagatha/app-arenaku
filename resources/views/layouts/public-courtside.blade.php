@@ -12,25 +12,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/arenaku-public.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/arenaku-tokens.css') . '?v=' . filemtime(public_path('css/arenaku-tokens.css')) }}" rel="stylesheet">
+    <link href="{{ asset('css/arenaku-public.css') . '?v=' . filemtime(public_path('css/arenaku-public.css')) }}" rel="stylesheet">
 </head>
 <body class="ak-public">
     <a class="ak-skip" href="#main">Langsung ke konten</a>
     <header class="ak-header">
         <div class="ak-container ak-header-inner">
-            <a class="ak-brand" href="{{ route('/') }}" aria-label="Arenaku, beranda"><img class="ak-brand-image" src="{{ asset('assets/img/logo_arenaku.jpg') }}" alt="Arenaku" width="3656" height="2680"></a>
+            <a class="ak-brand" href="{{ route('/') }}" aria-label="Arenaku, beranda"><img class="ak-brand-image" src="{{ asset('assets/img/logo_arenaku-640.webp') }}" alt="Arenaku" width="640" height="469"></a>
             <nav class="ak-nav" aria-label="Navigasi utama"><a href="{{ route('/') }}#hasil-lapangan">Cari lapangan</a><a class="ak-nav-login" href="{{ route('login') }}">Masuk <span class="ak-desktop-label">pengelola</span><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i></a></nav>
         </div>
     </header>
     @yield('content')
     <footer class="ak-footer">
         <div class="ak-container ak-footer-inner">
-            <div><a class="ak-brand" href="{{ route('/') }}" aria-label="Arenaku, beranda"><img class="ak-brand-image" src="{{ asset('assets/img/logo_arenaku.jpg') }}" alt="Arenaku" width="3656" height="2680" loading="lazy"></a><p>Temukan tempatnya. Tentukan waktu mainmu.</p></div>
+            <div><a class="ak-brand" href="{{ route('/') }}" aria-label="Arenaku, beranda"><img class="ak-brand-image" src="{{ asset('assets/img/logo_arenaku-640.webp') }}" alt="Arenaku" width="640" height="469" loading="lazy"></a><p>Temukan tempatnya. Tentukan waktu mainmu.</p></div>
             <nav aria-label="Navigasi footer"><a href="{{ route('/') }}#hasil-lapangan">Jelajahi lapangan</a><a href="{{ route('login') }}">Masuk pengelola</a></nav>
             <small>&copy; {{ now()->year }} Arenaku</small>
         </div>
     </footer>
     <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('js/arenaku-public.js') }}" defer></script>
+    <script src="{{ asset('js/arenaku-public.js') . '?v=' . filemtime(public_path('js/arenaku-public.js')) }}" defer></script>
 </body>
 </html>
