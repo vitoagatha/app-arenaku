@@ -37,8 +37,8 @@
                                         <td>{{ $booking->durasi }}</td>
                                         <td>{{ $booking->jadwalLapangan->lapangan->nama_lapangan }}</td>
                                         <td>{{ $booking->jadwalLapangan->court->nama_courts }}</td>
-                                        <td>{{ $booking->jadwalLapangan->jam_awal }} -
-                                            {{ $booking->jadwalLapangan->jam_akhir }}</td>
+                                        <td>{{ substr($booking->jadwalLapangan->jam_awal, 0, 5) }} -
+                                            {{ substr($booking->jadwalLapangan->jam_akhir, 0, 5) }}</td>
                                         <td data-order="{{ $booking->jadwalLapangan->tanggal }}">{{ \Carbon\Carbon::parse($booking->jadwalLapangan->tanggal)->locale('id')->translatedFormat('j M Y') }}</td>
                                         <td>@include('components.dashboard.status', ['status' => $booking->status, 'kind' => 'booking'])</td><td>
                                             <a href="{{ route('booking.edit', ['booking' => $booking->id]) }}"

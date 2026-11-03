@@ -32,11 +32,11 @@
                             @php($statusLabel = ['ready' => 'Tersedia', 'booking' => 'Dipesan', 'closed' => 'Ditutup'][$jadwal->status] ?? 'Tidak tersedia')
                             <li>
                                 @if ($jadwal->status === 'ready')
-                                    <a class="ak-slot ak-slot-ready" href="{{ route('lapangan.confirm-booking', ['id' => $jadwal->id]) }}" aria-label="Pilih {{ $jadwal->court->nama_courts }}, {{ $jadwal->jam_awal }} sampai {{ $jadwal->jam_akhir }}, {{ $tanggal }}">
-                                        <strong>{{ $jadwal->jam_awal }} – {{ $jadwal->jam_akhir }}</strong><span>{{ $statusLabel }} · Pilih jadwal</span>
+                                    <a class="ak-slot ak-slot-ready" href="{{ route('lapangan.confirm-booking', ['id' => $jadwal->id]) }}" aria-label="Pilih {{ $jadwal->court->nama_courts }}, {{ substr($jadwal->jam_awal, 0, 5) }} sampai {{ substr($jadwal->jam_akhir, 0, 5) }}, {{ $tanggal }}">
+                                        <strong>{{ substr($jadwal->jam_awal, 0, 5) }} – {{ substr($jadwal->jam_akhir, 0, 5) }}</strong><span>{{ $statusLabel }} · Pilih jadwal</span>
                                     </a>
                                 @else
-                                    <div class="ak-slot ak-slot-unavailable"><strong>{{ $jadwal->jam_awal }} – {{ $jadwal->jam_akhir }}</strong><span>{{ $statusLabel }}</span></div>
+                                    <div class="ak-slot ak-slot-unavailable"><strong>{{ substr($jadwal->jam_awal, 0, 5) }} – {{ substr($jadwal->jam_akhir, 0, 5) }}</strong><span>{{ $statusLabel }}</span></div>
                                 @endif
                             </li>
                         @endforeach

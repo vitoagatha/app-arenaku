@@ -9,7 +9,7 @@
             <p>Mulai dari tempat yang cocok. Lihat jadwal lapangan, pilih waktu, lalu isi data booking.</p>
             <a class="ak-text-link" href="#hasil-lapangan">Jelajahi lapangan <i class="bi bi-arrow-down" aria-hidden="true"></i></a>
         </div>
-        <div class="ak-hero-photo"><img src="{{ asset('assets/img/hero-bg.jpg') }}" alt="Lapangan bulu tangkis indoor dengan garis lapangan dan net" width="1600" height="960" fetchpriority="high"><span>Tempat bertemu. Waktu untuk bermain.</span></div>
+        <div class="ak-hero-photo"><img src="{{ asset('assets/img/hero-bg-1200.webp') }}" alt="Lapangan bulu tangkis indoor dengan garis lapangan dan net" width="1600" height="960" srcset="{{ asset('assets/img/hero-bg-640.webp') }} 640w, {{ asset('assets/img/hero-bg-1200.webp') }} 1200w" sizes="(min-width: 768px) 50vw, 100vw" fetchpriority="high"><span>Tempat bertemu. Waktu untuk bermain.</span></div>
     </section>
     <section class="ak-container ak-discovery" aria-label="Pencarian lapangan">
         <form class="ak-search" action="{{ route('cms.search') }}" method="POST" role="search">
