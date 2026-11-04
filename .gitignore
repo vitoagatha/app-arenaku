@@ -11,3 +11,5 @@ npm-debug.log
 yarn-error.log
 
 /.phpunit.cache
+/tests/.runtime/
+.env.testing

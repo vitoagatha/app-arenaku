@@ -8,6 +8,7 @@ use App\Models\Court;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class JadwalController extends Controller
 {
@@ -44,7 +45,7 @@ class JadwalController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'court_id' => 'required|exists:courts,id',
             'lapangan_id' => 'required|exists:lapangan,id',
             'jam_awal' => 'required',
@@ -54,30 +55,32 @@ class JadwalController extends Controller
 
         $lapangan = $this->findLapanganById($request->lapangan_id);
 
-        JadwalLapangan::create($request->all());
+        JadwalLapangan::create($validated);
 
         return redirect()->back()->with('success', 'Jadwal berhasil ditambahkan');
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $jadwal = JadwalLapangan::findOrFail($id);
+        $this->findLapanganById($jadwal->lapangan_id);
+
+        $validated = $request->validate([
             'court_id' => 'required|exists:courts,id',
             'lapangan_id' => 'required|exists:lapangan,id',
             'jam_awal' => 'required',
             'jam_akhir' => 'required',
             'tanggal' => 'required|date',
-            'status' => 'required',
+            'status' => 'required|in:ready,booking,closed',
         ]);
 
-        $jadwal = JadwalLapangan::findOrFail($id);
-        $lapangan = $this->findLapanganById($jadwal->lapangan_id);
+        $lapangan = $this->findLapanganById($validated['lapangan_id']);
 
         if ($lapangan->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
             return redirect()->route('jadwal.index')->with('error', 'You do not have permission to delete this jadwal.');
         }
 
-        $jadwal->update($request->all());
+        $jadwal->update($validated);
 
         return redirect()->back()->with('success', 'Jadwal berhasil diupdate');
     }
