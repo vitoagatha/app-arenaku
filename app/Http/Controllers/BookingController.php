@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\JadwalLapangan;
 use App\Models\KonfirmasiBooking;
 use Illuminate\Routing\Controller;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = KonfirmasiBooking::with('jadwalLapangan.lapangan', 'jadwalLapangan.court')->get();
+        $bookings = $this->accessibleBookings()->with('jadwalLapangan.lapangan', 'jadwalLapangan.court')->get();
         return view('dashboard.booking.index', compact('bookings'));
     }
 
@@ -45,7 +47,7 @@ class BookingController extends Controller
 
     public function edit($id)
     {
-        $booking = KonfirmasiBooking::findOrFail($id);
+        $booking = $this->accessibleBookings()->findOrFail($id);
         if (!$booking) {
             return redirect()->route('booking.index')->with('error', 'Booking not found.');
         }
@@ -55,13 +57,14 @@ class BookingController extends Controller
 
     public function update(Request $request, $id)
     {
+        $booking = $this->accessibleBookings()->findOrFail($id);
+
         $request->validate([
             'nama' => 'required|string',
             'no_whatsapp' => 'required|string',
             'durasi' => 'required|integer',
         ]);
 
-        $booking = KonfirmasiBooking::findOrFail($id);
         if (!$booking) {
             return redirect()->route('booking.index')->with('error', 'Booking not found.');
         }
@@ -77,12 +80,22 @@ class BookingController extends Controller
 
     public function destroy($id)
     {
-        $booking = KonfirmasiBooking::findOrFail($id);
+        $booking = $this->accessibleBookings()->findOrFail($id);
         if (!$booking) {
             return redirect()->route('booking.index')->with('error', 'Booking not found.');
         }
 
         $booking->delete();
         return redirect()->route('booking.index')->with('success', 'Booking berhasil dihapus!');
+    }
+
+    private function accessibleBookings(): Builder
+    {
+        $user = Auth::user();
+        abort_unless($user && in_array($user->role, ['admin', 'penjaga'], true), 403);
+
+        return KonfirmasiBooking::query()->when($user->role !== 'admin', function (Builder $query) use ($user) {
+            $query->whereHas('jadwalLapangan.lapangan', fn (Builder $venue) => $venue->where('user_id', $user->id));
+        });
     }
 }

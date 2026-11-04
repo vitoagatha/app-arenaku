@@ -49,17 +49,19 @@ Route::get('home', 'HomeController@index')->name('home');
 Route::get('profile', 'ProfileController@index')->name('profile');
 Route::put('profile', 'ProfileController@update')->name('profile.update');
 
-Route::resource('users', UserController::class)->middleware('auth');
-Route::resource('lapangan', LapanganController::class);
-Route::resource('courts', CourtController::class);
+Route::middleware(['auth', 'can:access-management'])->group(function () {
+    Route::resource('users', UserController::class)->middleware('can:manage-administration');
+    Route::resource('lapangan', LapanganController::class);
+    Route::resource('courts', CourtController::class)->middleware('can:manage-administration');
 
-Route::get('jadwal', [JadwalController::class, 'index'])->name('jadwal.index');
-Route::get('jadwal/{jadwal}/court', [JadwalController::class, 'jadwal'])->name('jadwal.court');
-Route::post('jadwal/store', [JadwalController::class, 'store'])->name('jadwal.store');
-Route::put('jadwal/{jadwal}', [JadwalController::class, 'update'])->name('jadwal.update');
-Route::delete('jadwal/{jadwal}', [JadwalController::class, 'destroy'])->name('jadwal.destroy');
+    Route::get('jadwal', [JadwalController::class, 'index'])->name('jadwal.index');
+    Route::get('jadwal/{jadwal}/court', [JadwalController::class, 'jadwal'])->name('jadwal.court');
+    Route::post('jadwal/store', [JadwalController::class, 'store'])->name('jadwal.store');
+    Route::put('jadwal/{jadwal}', [JadwalController::class, 'update'])->name('jadwal.update');
+    Route::delete('jadwal/{jadwal}', [JadwalController::class, 'destroy'])->name('jadwal.destroy');
 
-Route::get('booking', [BookingController::class, 'index'])->name('booking.index');
-Route::get('booking/{booking}/edit', [BookingController::class, 'edit'])->name('booking.edit');
-Route::put('booking/{booking}', [BookingController::class, 'update'])->name('booking.update');
-Route::delete('booking/{booking}', [BookingController::class, 'destroy'])->name('booking.destroy');
+    Route::get('booking', [BookingController::class, 'index'])->name('booking.index');
+    Route::get('booking/{booking}/edit', [BookingController::class, 'edit'])->name('booking.edit');
+    Route::put('booking/{booking}', [BookingController::class, 'update'])->name('booking.update');
+    Route::delete('booking/{booking}', [BookingController::class, 'destroy'])->name('booking.destroy');
+});
