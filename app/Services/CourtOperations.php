@@ -105,7 +105,7 @@ final class CourtOperations
 
     private function reservations(int $venueId)
     {
-        // Conservatively preserve allocated slots, including stale pending; lifecycle release is stage 4.
+        app(HourlyBooking::class)->expireForVenue($venueId);
         return DB::table('active_slot_reservations as r')
             ->join('schedule_slots as s', 's.id', '=', 'r.slot_id')
             ->join('venue_courts as c', 'c.id', '=', 's.venue_court_id')
@@ -198,6 +198,7 @@ final class CourtOperations
         return DB::transaction(function () use ($venueId, $date) {
             $venue = $this->venue($venueId);
             $today = $this->now()->startOfDay();
+            app(HourlyBooking::class)->expireForVenue($venueId);
             $chosen = CarbonImmutable::parse($date, 'Asia/Jakarta');
             if (!$venue->hourly_booking_enabled || $chosen->lessThan($today) || $chosen->greaterThanOrEqualTo($today->addDays($venue->booking_window_days))) {
                 return [];
