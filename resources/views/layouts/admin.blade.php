@@ -80,5 +80,8 @@
     <script src="{{ asset('js/demo/datatables-demo.js') }}"></script>
     @endif
     <script src="{{ asset('js/arenaku-dashboard.js') . '?v=' . filemtime(public_path('js/arenaku-dashboard.js')) }}"></script>
+    @if(request()->routeIs('jadwal.operations', 'booking.index', 'booking.detail'))
+    <script src="{{ asset('js/arenaku-hourly-dashboard.js') . '?v=' . filemtime(public_path('js/arenaku-hourly-dashboard.js')) }}"></script>
+    @endif
 </body>
 </html>

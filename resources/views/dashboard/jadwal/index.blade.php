@@ -34,6 +34,7 @@
                                         <td>@include('components.dashboard.venue-description')</td>
                                         <td>@include('components.dashboard.venue-image')</td>
                                         <td>
+                                            <a class="btn btn-primary btn-sm" href="{{ route('jadwal.operations', $lapangan->id) }}">Operasional per jam</a>
                                             <a href="{{ route('jadwal.court', $lapangan->id) }}"
                                                 class="btn btn-info btn-sm">
                                                 <i class="far fa-calendar-check" aria-hidden="true"></i> Atur jadwal

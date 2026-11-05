@@ -199,4 +199,11 @@ class ManagementAuthorizationTest extends TestCase
         ])->assertOk()->assertSee('Booking berhasil dicatat');
         $this->assertDatabaseHas('konfirmasi_bookings', ['nama' => 'Public test customer', 'status' => 'pending']);
     }
+
+    public function test_hourly_dashboard_explains_schema_readiness_without_migrating(): void
+    {
+        $this->actingAs($this->caretaker)->get(route('jadwal.operations', $this->ownVenue->id))
+            ->assertOk()->assertSee('Pengaturan per jam sedang disiapkan');
+        $this->assertFalse(\Illuminate\Support\Facades\Schema::hasTable('venue_courts'));
+    }
 }

@@ -177,3 +177,30 @@
 .akd-venue-description summary:focus-visible { outline: 3px solid var(--ak-green); outline-offset: 3px; }
 .akd-venue-description[open] summary { margin-bottom: .5rem; }
 .akd-venue-description:not([open]) > .akd-cell-description { display: none; }
+
+/* Hourly operations use the existing Courtside tokens and compact controls. */
+.akd-operations-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+.akd-operations-grid > *, .akd-court-grid > * { min-width: 0; }
+.akd-management .akd-surface { margin-bottom: 1.25rem; overflow-wrap: anywhere; }
+.akd-inline-filter { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-block: 1rem; }
+.akd-inline-filter .form-control { width: auto; max-width: 100%; }
+.akd-court-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 1rem; margin-block: 1rem; }
+.akd-court-slots { min-width: 0; border: 1px solid var(--ak-border); border-radius: var(--ak-radius-control); padding: .75rem; }
+.akd-court-slots legend { width: auto; padding-inline: .25rem; font-size: 1.125rem; font-weight: 600; }
+.akd-slot-option { display: flex; gap: .75rem; align-items: center; min-height: 48px; border-bottom: 1px solid var(--ak-border); padding: .5rem; cursor: pointer; font-variant-numeric: tabular-nums; }
+.akd-slot-option span { display: grid; }
+.akd-slot-option small { color: var(--ak-muted); }
+.akd-slot-option:has(input:checked) { background: var(--ak-mist); box-shadow: inset 3px 0 var(--ak-green); }
+.akd-slot-option:focus-within { outline: 3px solid var(--ak-green); outline-offset: 2px; }
+.akd-slot-disabled { cursor: default; color: var(--ak-muted); }
+.akd-check { display: flex; align-items: flex-start; gap: .625rem; padding-block: .75rem; min-height: 44px; }
+.akd-check input { margin-top: .25rem; }
+.akd-closure-item { border-top: 1px solid var(--ak-border); padding-block: .75rem; }
+.akd-closure-item summary { min-height: 44px; cursor: pointer; padding-block: .5rem; }
+.akd-booking-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 1rem; }
+.akd-booking-facts dd { margin-bottom: 0; }
+.akd-hourly-table { min-width: 960px; }
+.akd-hourly-table th { white-space: nowrap; }
+.akd-hourly-table td { min-width: 115px; max-width: 240px; }
+.akd-operations-grid { align-items: start; }
+@media(min-width: 1024px) { .akd-operations-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

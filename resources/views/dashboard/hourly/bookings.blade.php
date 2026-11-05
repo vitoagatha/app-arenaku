@@ -1,0 +1,19 @@
+@extends('layouts.admin')
+@section('main-content')
+<div class="akd-management"><div class="akd-page-heading"><h1>Daftar booking</h1><p>Periksa permintaan, konfirmasi, dan riwayat pemesanan dalam WIB.</p></div>
+@include('components.dashboard.feedback',['linkErrors'=>false])
+<section class="akd-surface"><div class="akd-panel-heading"><h2>Menunggu konfirmasi: {{ $pending }}</h2><a class="btn btn-primary" href="{{ route('jadwal.index') }}">Catat booking dari jadwal</a></div>
+<a href="{{ route('booking.index',['status'=>'pending']) }}">Lihat permintaan menunggu</a>
+<p role="status" data-pending-refresh></p>
+<form method="GET" action="{{ route('booking.index') }}" class="akd-inline-filter">
+<label for="booking-search">Cari pemesan, kontak, venue, atau court</label><input class="form-control" type="search" id="booking-search" name="search" maxlength="100" value="{{ request('search') }}">
+<label for="booking-sort">Urutkan berdasarkan</label><select class="form-control" id="booking-sort" name="sort">@foreach(['newest'=>'Nomor booking','name'=>'Pemesan','phone'=>'Kontak','venue'=>'Venue','court'=>'Court','start'=>'Waktu main','status'=>'Status','duration'=>'Durasi','source'=>'Sumber'] as $value=>$label)<option value="{{ $value }}" @selected(request('sort','newest')===$value)>{{ $label }}</option>@endforeach</select>
+<label for="booking-direction">Arah urutan</label><select class="form-control" id="booking-direction" name="direction"><option value="desc" @selected(request('direction','desc')==='desc')>Menurun</option><option value="asc" @selected(request('direction')==='asc')>Menaik</option></select>
+<label for="filter-status">Status</label><select class="form-control" id="filter-status" name="status"><option value="">Semua status</option>@foreach(['pending'=>'Menunggu','confirmed'=>'Dikonfirmasi','canceled'=>'Dibatalkan','expired'=>'Kedaluwarsa'] as $value=>$label)<option value="{{ $value }}" @selected(request('status')===$value)>{{ $label }}</option>@endforeach</select>
+<label for="filter-date">Tanggal main</label><input class="form-control" type="date" id="filter-date" name="date" value="{{ request('date') }}"><button class="btn btn-secondary" type="submit">Terapkan filter</button><a href="{{ route('booking.index') }}">Reset</a></form>
+<p class="akd-muted">Batas konfirmasi diperiksa kembali saat tindakan dikirim. <a href="{{ request()->fullUrl() }}">Perbarui daftar</a></p>
+<div class="akd-table-scroll" role="region" aria-label="Booking dan permintaan" tabindex="0"><table class="table akd-table akd-hourly-table"><caption class="sr-only">Daftar booking sesuai filter</caption><thead><tr>@foreach(['Pemesan','Venue / court','Waktu main (WIB)','Durasi','Sumber','Status / batas konfirmasi','Aksi'] as $heading)<th scope="col">{{ $heading }}</th>@endforeach</tr></thead><tbody>
+@forelse($rows as $row)<tr><td>{{ $row->nama }}<br><span class="akd-muted">{{ $row->no_whatsapp }}</span></td><td>{{ $row->nama_lapangan }}<br>{{ $row->court_name ?? 'Court legacy' }}</td><td>{{ $row->is_legacy ? $row->legacy_date : substr($row->starts_at,0,10) }}<br>{{ $row->is_legacy ? substr($row->jam_awal,0,5).'–'.substr($row->jam_akhir,0,5) : substr($row->starts_at,11,5).'–'.substr($row->ends_at,11,5) }}</td><td>{{ $row->durasi }} jam</td><td>{{ $row->is_legacy ? 'Riwayat lama' : (['website'=>'Website','walk_in'=>'Datang langsung','whatsapp'=>'WhatsApp'][$row->source] ?? 'Tidak tercatat') }}</td><td>@include('components.dashboard.status',['status'=>$row->status,'kind'=>'booking'])@if(!$row->is_legacy && $row->status==='pending')<br><time datetime="{{ str_replace(' ','T',$row->expires_at) }}+07:00">{{ $row->expires_at }} WIB</time>@endif</td><td><a class="btn btn-secondary btn-sm" href="{{ route('booking.detail',$row->id) }}">Lihat booking #{{ $row->id }}</a></td></tr>
+@empty<tr><td colspan="7">Tidak ada booking yang sesuai filter.</td></tr>@endforelse
+</tbody></table></div>{{ $rows->links() }}</section></div>
+@endsection
