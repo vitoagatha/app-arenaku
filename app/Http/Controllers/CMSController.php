@@ -24,11 +24,15 @@ class CMSController extends Controller
         return view('cms.index', compact('lapangans'));
     }
 
-    public function cekBooking(String $id)
+    public function cekBooking(Request $request, String $id)
     {
         $lapangan = Lapangan::findOrFail($id);
         if (!$lapangan) {
             return redirect()->route('/')->with('error', 'Lapangan not found.');
+        }
+
+        if ($lapangan->hourly_booking_enabled) {
+            return app(PublicHourlyBookingController::class)->page($request, $lapangan, app(\App\Services\CourtOperations::class));
         }
 
         return view('cms.cek-booking', compact('lapangan'));
@@ -37,6 +41,10 @@ class CMSController extends Controller
     public function checkAvailability(Request $request, String $id)
     {
         $lapangan = Lapangan::findOrFail($id);
+        if ($lapangan->hourly_booking_enabled) {
+            $date = $request->validate(['tanggal' => 'required|date_format:Y-m-d'])['tanggal'];
+            return redirect()->route('cms.cek-booking', ['lapangan' => $id, 'tanggal' => $date], 303);
+        }
         if (!$lapangan) {
             return redirect()->route('/')->with('error', 'Lapangan not found.');
         }
@@ -61,6 +69,9 @@ class CMSController extends Controller
         }
 
         $lapangan = $jadwal->lapangan; // Mengakses relasi Lapangan dari JadwalLapangan
+        if ($lapangan->hourly_booking_enabled) {
+            return redirect()->route('cms.cek-booking', $lapangan->id);
+        }
 
         return view('cms.konfirmasi-booking', compact('lapangan', 'jadwal'));
     }

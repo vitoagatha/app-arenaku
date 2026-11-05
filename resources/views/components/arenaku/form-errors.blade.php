@@ -4,7 +4,7 @@
         <ul>
             @foreach ($errors->messages() as $field => $messages)
                 @foreach ($messages as $message)
-                    <li><a href="#{{ $field }}">{{ $message }}</a></li>
+                    <li>@if($linkErrors ?? true)<a href="#{{ $field }}">{{ $message }}</a>@else{{ $message }}@endif</li>
                 @endforeach
             @endforeach
         </ul>

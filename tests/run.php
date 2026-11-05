@@ -29,6 +29,7 @@ try {
         'tests/Database/CourtOperationsTest.php',
         'tests/Database/HourlyBookingTest.php',
         'tests/Database/DashboardHourlyTest.php',
+        'tests/Database/PublicHourlyBookingTest.php',
     ]);
     if (!$isolated->sourceUnchanged()) {
         fwrite(STDERR, "Source operational snapshot changed during the test run; investigate concurrent changes.\n");

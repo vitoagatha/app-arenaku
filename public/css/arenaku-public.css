@@ -142,6 +142,15 @@
 .ak-slot-ready:hover { background: var(--ak-mist); text-decoration: underline; }
 .ak-slot-ready:active { background: var(--ak-border); }
 .ak-slot-unavailable { color: var(--ak-muted); border-style: dashed; }
+.ak-hourly-form { margin-top: var(--ak-space-6); }
+.ak-hourly-court { min-width: 0; }
+.ak-hourly-court legend { width: auto; padding-inline: .25rem; }
+.ak-hourly-court .ak-slot-list { grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)); }
+.ak-hourly-court .ak-slot { display: grid; grid-template-columns: auto 1fr; align-content: start; align-items: center; margin: 0; cursor: pointer; }
+.ak-hourly-court .ak-slot span { grid-column: 2; }
+.ak-hourly-court .ak-slot:has(input:checked) { background: var(--ak-mist); }
+.ak-hourly-court .ak-slot:focus-within { outline: 3px solid var(--ak-green); outline-offset: 2px; }
+.ak-hourly-court .ak-slot:has(input:disabled) { cursor: default; }
 .ak-notice { margin-top: var(--ak-space-4) !important; padding: var(--ak-space-4); border-left: 3px solid var(--ak-orange); }
 .ak-booking-grid { display: grid; gap: var(--ak-space-6); margin-top: var(--ak-space-6); align-items: start; }
 .ak-summary { margin-block: var(--ak-space-6); }

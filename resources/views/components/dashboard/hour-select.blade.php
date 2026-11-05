@@ -7,4 +7,10 @@
 @for($hour=0; $hour<24; $hour++) @php($time=sprintf('%02d:00', $hour))
 <option value="{{ $time }}" @selected($time === substr((string)$hourValue,0,5))>{{ $time }}</option>
 @endfor
-</select>@if(old('action') === $hourAction)@error($name)<p class="akd-field-error" id="{{ $prefix }}-{{ $name }}-error">{{ $message }}</p>@enderror@endif</div>
+</select>
+@if(old('action') === $hourAction)
+    @error($name)
+        <p class="akd-field-error" id="{{ $prefix }}-{{ $name }}-error">{{ $message }}</p>
+    @enderror
+@endif
+</div>

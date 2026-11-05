@@ -31,6 +31,9 @@ Route::get('cms/{lapangan}/cek-booking', [CMSController::class, 'cekBooking'])->
 Route::post('cms/{lapangan}/cek-booking', [CMSController::class, 'checkAvailability'])->name('lapangan.check-availability');
 Route::get('cms/{id}/confirm-booking', [CMSController::class, 'confirmBooking'])->name('lapangan.confirm-booking');
 Route::post('booking/store', [BookingController::class, 'store'])->name('booking.store');
+Route::get('cms/{lapangan}/slot-per-jam', [\App\Http\Controllers\PublicHourlyBookingController::class, 'availability'])->name('booking.hourly.availability');
+Route::post('cms/{lapangan}/booking-per-jam', [\App\Http\Controllers\PublicHourlyBookingController::class, 'store'])->name('booking.hourly.store');
+Route::get('cms/{lapangan}/booking-per-jam/{key}', [\App\Http\Controllers\PublicHourlyBookingController::class, 'receipt'])->whereUuid('key')->name('booking.hourly.receipt');
 
 
 /**
