@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\JadwalLapangan;
+use App\Models\Lapangan;
 use App\Models\KonfirmasiBooking;
 use Illuminate\Routing\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BookingController extends Controller
 {
@@ -29,17 +31,17 @@ class BookingController extends Controller
             'durasi' => 'required|integer',
         ]);
 
-        $konfirmasiBooking = KonfirmasiBooking::create([
-            'jadwal_lapangan_id' => $request->jadwal_lapangan_id,
-            'nama' => $request->nama,
-            'no_whatsapp' => $request->no_whatsapp,
-            'durasi' => $request->durasi,
-        ]);
-
-        // Update status jadwal lapangan menjadi 'booking'
-        $jadwalLapangan = JadwalLapangan::findOrFail($request->jadwal_lapangan_id);
-        $jadwalLapangan->status = 'booking';
-        $jadwalLapangan->save();
+        [$konfirmasiBooking, $jadwalLapangan] = DB::transaction(function () use ($request) {
+            $jadwal = JadwalLapangan::findOrFail($request->jadwal_lapangan_id);
+            $venue = Lapangan::whereKey($jadwal->lapangan_id)->lockForUpdate()->firstOrFail();
+            abort_if($venue->hourly_booking_enabled, 409, 'Venue ini memakai jadwal per jam. Buka kembali halaman jadwal.');
+            $jadwal = JadwalLapangan::whereKey($jadwal->id)->lockForUpdate()->firstOrFail();
+            abort_unless($jadwal->lapangan_id === $venue->id, 409, 'Venue jadwal berubah. Buka kembali halaman jadwal.');
+            $booking = KonfirmasiBooking::create($request->only('jadwal_lapangan_id', 'nama', 'no_whatsapp', 'durasi'));
+            $jadwal->status = 'booking';
+            $jadwal->save();
+            return [$booking, $jadwal];
+        });
 
         // Mengambil data lapangan terkait
         $lapangan = $jadwalLapangan->lapangan;
