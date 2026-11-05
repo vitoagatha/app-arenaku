@@ -11,8 +11,11 @@ use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if (DashboardOperationsController::ready()) {
+            return app(DashboardOperationsController::class)->bookings($request);
+        }
         $bookings = $this->accessibleBookings()->with('jadwalLapangan.lapangan', 'jadwalLapangan.court')->get();
         return view('dashboard.booking.index', compact('bookings'));
     }
@@ -94,7 +97,7 @@ class BookingController extends Controller
         $user = Auth::user();
         abort_unless($user && in_array($user->role, ['admin', 'penjaga'], true), 403);
 
-        return KonfirmasiBooking::query()->when($user->role !== 'admin', function (Builder $query) use ($user) {
+        return KonfirmasiBooking::query()->whereNotNull('jadwal_lapangan_id')->when($user->role !== 'admin', function (Builder $query) use ($user) {
             $query->whereHas('jadwalLapangan.lapangan', fn (Builder $venue) => $venue->where('user_id', $user->id));
         });
     }

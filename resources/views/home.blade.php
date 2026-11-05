@@ -10,6 +10,7 @@
     <section class="akd-surface" aria-labelledby="tasks-title"><h2 id="tasks-title">{{ $admin ? 'Akses pengelolaan' : 'Tugas operasional' }}</h2><p class="akd-muted">{{ $admin ? 'Pilih data yang ingin kamu kelola.' : 'Buka jadwal atau periksa informasi booking melalui menu berikut.' }}</p>
         @if(!$admin && $widget['lapangan'] === 0)<p class="akd-note">Belum ada lapangan yang ditugaskan ke akunmu. Hubungi admin untuk penugasan lapangan.</p>@endif
         <div class="akd-tasks">
+            @include('components.dashboard.task-link', ['route'=>'booking.index', 'parameters'=>['status'=>'pending'], 'label'=>'Menunggu konfirmasi', 'description'=>'Periksa permintaan dan batas waktu konfirmasi.', 'icon'=>'hourglass-half'])
             @include('components.dashboard.task-link', ['route' => 'jadwal.index', 'label' => 'Atur jadwal', 'description' => 'Pilih lapangan untuk mengelola tanggal dan jam main.', 'icon' => 'calendar-alt'])
             @include('components.dashboard.task-link', ['route' => 'booking.index', 'label' => 'Daftar booking', 'description' => 'Lihat data pemesan dan jadwal booking.', 'icon' => 'clipboard-list'])
             @include('components.dashboard.task-link', ['route' => 'lapangan.index', 'label' => $admin ? 'Kelola lapangan' : 'Lapangan saya', 'description' => 'Buka informasi dan foto lapangan.', 'icon' => 'building'])

@@ -50,6 +50,10 @@ Route::get('profile', 'ProfileController@index')->name('profile');
 Route::put('profile', 'ProfileController@update')->name('profile.update');
 
 Route::middleware(['auth', 'can:access-management'])->group(function () {
+    Route::get('jadwal/{venue}/operasional', [\App\Http\Controllers\DashboardOperationsController::class, 'operations'])->name('jadwal.operations');
+    Route::post('jadwal/{venue}/operasional', [\App\Http\Controllers\DashboardOperationsController::class, 'save'])->name('jadwal.operations.save');
+    Route::get('booking/{booking}/detail', [\App\Http\Controllers\DashboardOperationsController::class, 'detail'])->name('booking.detail');
+    Route::post('booking/{booking}/status', [\App\Http\Controllers\DashboardOperationsController::class, 'transition'])->name('booking.transition');
     Route::resource('users', UserController::class)->middleware('can:manage-administration');
     Route::resource('lapangan', LapanganController::class);
     Route::resource('courts', CourtController::class)->middleware('can:manage-administration');
