@@ -21,7 +21,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('hourly:maintain expiry')->everyMinute()->withoutOverlapping(5);
+        $schedule->command('hourly:maintain slots')->everyFifteenMinutes()->timezone('Asia/Jakarta')
+            ->when(fn () => app(\App\Services\HourlyMaintenance::class)->needsSlots())
+            ->withoutOverlapping(30);
     }
 
     /**
