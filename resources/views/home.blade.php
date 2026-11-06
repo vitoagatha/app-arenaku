@@ -3,6 +3,27 @@
     @php($admin = Auth::user()->role === 'admin')
     <div class="akd-page-heading"><h1>{{ $admin ? 'Ringkasan pengelolaan' : 'Siapkan lapangan untuk bermain' }}</h1><p>{{ $admin ? 'Kelola tempat, jadwal, dan data Arenaku dari satu ruang kerja.' : 'Mulai dari jadwal lapangan yang menjadi tanggung jawabmu.' }}</p></div>
     @include('components.dashboard.feedback')
+    @if($admin && isset($health))
+        <section class="akd-surface" aria-labelledby="hourly-health-title">
+            <h2 id="hourly-health-title">Proses booking otomatis</h2>
+            @if($health['expiryLate'] || $health['backlog'])
+                <p class="akd-note" role="alert">Periksa proses kedaluwarsa. Booking lewat tenggat yang masih menunggu: {{ $health['backlog'] }}.</p>
+            @endif
+            @if($health['slotsLate'])
+                <p class="akd-note">Pembentukan slot hari ini belum tercatat berhasil.</p>
+            @endif
+            <dl>
+                <dt>Kedaluwarsa terakhir berhasil</dt>
+                <dd>{{ $health['expiry'] ? $health['expiry']->finished_at.' WIB · '.$health['expiry']->processed_count.' booking' : 'Belum tercatat' }}</dd>
+                <dt>Pembentukan slot terakhir berhasil</dt>
+                <dd>{{ $health['slots'] ? $health['slots']->finished_at.' WIB · '.$health['slots']->processed_count.' slot baru' : 'Belum tercatat' }}</dd>
+                @if($health['failure'])
+                    <dt>Kegagalan terakhir</dt>
+                    <dd>{{ $health['failure']->task === 'expiry' ? 'Kedaluwarsa' : 'Pembentukan slot' }} · {{ $health['failure']->finished_at }} WIB</dd>
+                @endif
+            </dl>
+        </section>
+    @endif
     <dl class="akd-stats">
         <div><dt>{{ $admin ? 'Lapangan terdaftar' : 'Lapangan yang ditugaskan' }}</dt><dd>{{ $widget['lapangan'] }}</dd></div>
         @if($admin)<div><dt>Pengguna terdaftar</dt><dd>{{ $widget['users'] }}</dd></div>@endif

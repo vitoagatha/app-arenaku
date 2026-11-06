@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Lapangan;
+use App\Services\HourlyMaintenance;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -36,6 +37,12 @@ class HomeController extends Controller
             'lapangan' => $jumlahLapangan,
         ];
 
-        return view('home', compact('widget'));
+        $health = null;
+        if ($user->role === 'admin') {
+            $maintenance = app(HourlyMaintenance::class);
+            $health = $maintenance->ready() ? $maintenance->health() : null;
+        }
+
+        return view('home', compact('widget', 'health'));
     }
 }
