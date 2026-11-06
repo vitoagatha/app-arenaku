@@ -3,9 +3,6 @@ if (form) {
     const controls = [...form.querySelectorAll('input[name="slot_ids[]"]')];
     const summary = form.querySelector('[data-selection-summary]');
     const feedback = form.querySelector('[data-availability-feedback]');
-    const deadline = new Intl.DateTimeFormat('id-ID', {
-        timeZone: 'Asia/Jakarta', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
-    });
     let clock = Date.parse(form.dataset.now);
     let clockReceived = performance.now();
     let refreshing = false;
@@ -36,8 +33,7 @@ if (form) {
         if (items.length) {
             message = valid(items)
                 ? items[0].dataset.courtName + ' · ' + items[0].dataset.start.slice(11, 16)
-                    + '–' + items.at(-1).dataset.end.slice(11, 16) + ' WIB · ' + items.length + ' jam. Perkiraan batas konfirmasi '
-                    + deadline.format(Math.min(now + 3600000, startTime(items[0]))) + ' WIB.'
+                    + '–' + items.at(-1).dataset.end.slice(11, 16) + ' WIB · ' + items.length + ' jam.'
                 : 'Periksa pilihanmu. Gunakan slot yang masih tersedia dan berurutan pada satu court.';
         }
         if (summary.textContent !== message) summary.textContent = message;

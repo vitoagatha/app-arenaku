@@ -9,7 +9,7 @@
         <p>{{ $lapangan->nama_lapangan }} · {{ $booking->court_name }}</p>
         <p>{{ \Carbon\CarbonImmutable::parse($booking->starts_at, 'Asia/Jakarta')->locale('id')->translatedFormat('l, j F Y') }} · {{ substr($booking->starts_at, 11, 5) }}–{{ substr($booking->ends_at, 11, 5) }} WIB · {{ $booking->durasi }} jam</p>
         @if ($booking->status === 'pending')
-            <p class="ak-notice">Pengelola perlu mengonfirmasi sebelum <time datetime="{{ str_replace(' ', 'T', $booking->expires_at) }}+07:00">{{ $booking->expires_at }} WIB</time>.</p>
+            <p class="ak-notice">Menunggu konfirmasi pengelola</p>
         @elseif ($booking->status === 'confirmed')
             <p>Pengelola sudah menyetujui jadwal main. Konfirmasi ini tidak mencatat pembayaran.</p>
         @else
