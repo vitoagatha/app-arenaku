@@ -2,9 +2,9 @@
 
 Tanggal: 4 November 2026
 
-Status: Kesepakatan kebutuhan produk; belum diimplementasikan.
+Status per 9 November 2026: implementasi tahap 1–7 selesai dan pilot Giri Krida Court A aktif pada database lokal. Pengujian alur utama pilot lulus.
 
-Dokumen ini merangkum arah pembaruan jadwal, booking, dan dashboard yang telah dibahas. Dokumen ini bukan laporan bahwa fitur sudah tersedia dan bukan persetujuan untuk langsung mengubah backend. Implementasi dilakukan setelah ada instruksi berikutnya.
+Dokumen ini merangkum keputusan produk yang menjadi dasar implementasi jadwal, booking, dan dashboard. Bukti penerapan serta batas verifikasi terbaru tersedia pada [laporan pilot Giri Krida](qa/giri-krida-pilot-acceptance.md). Aktivasi venue lain dilakukan setelah konfigurasi dan pemeriksaan data masing-masing venue.
 
 ## 1. Tujuan
 
@@ -195,7 +195,7 @@ Semua waktu contoh menggunakan WIB. Nilai 60 menit memberi pengelola waktu untuk
 Aturan rinci:
 
 - Semua slot dalam satu booking memiliki satu batas konfirmasi dan kedaluwarsa sebagai satu kesatuan.
-- Tampilkan batas sebenarnya kepada pengguna sebelum mengirim serta setelah booking berhasil, terutama jika waktu bermain kurang dari 60 menit lagi.
+- Sesuai revisi tampilan yang disetujui setelah pilot, formulir menjelaskan aturan penahanan maksimal 60 menit atau sampai jam mulai. Ringkasan pilihan tidak menampilkan perkiraan tenggat. Halaman status pending menampilkan judul Menunggu konfirmasi dan pesan Menunggu konfirmasi pengelola. Tenggat sebenarnya tetap tersimpan dan tersedia bagi pengelola di dashboard.
 - Membuka ulang halaman atau menghubungi WhatsApp tidak memperpanjang batas pending.
 - Konfirmasi hanya sah ketika waktu server masih sebelum batas. Tepat pada atau setelah batas, booking dianggap kedaluwarsa.
 - Server tidak boleh menerima konfirmasi terlambat hanya karena proses otomatis belum memperbarui status tersimpan.
@@ -342,7 +342,7 @@ Transisi dilakukan melalui pencadangan, simulasi pemetaan, laporan konflik, peme
 
 ## 12. Penetapan arah teknis dan tindak lanjut audit
 
-Rancangan berikut menjadi arah implementasi berdasarkan pembahasan lanjutan. Nama tabel adalah usulan kerja dan dapat mengikuti konvensi proyek. Belum ada migration atau perubahan data yang dijalankan.
+Rancangan berikut menjadi acuan implementasi berdasarkan pembahasan lanjutan. Skema telah diterapkan pada database lokal melalui jalur migration cutover setelah backup dan uji restore. Detail aktual tercatat dalam laporan implementasi tiap tahap.
 
 ### 12.1. Struktur penyimpanan database
 
@@ -476,7 +476,7 @@ Pending 60 menit, pembaruan tampilan awal setiap 30 detik, proses kedaluwarsa se
 6. Sesuaikan halaman publik agar seluruh court dan slot terlihat serta tidak ada input ulang jam.
 7. Konfigurasikan proses otomatis dan pemantauannya. Jalankan pengujian aturan waktu, hak akses, konflik, transisi data, tampilan, dan alur booking pada lingkungan uji yang aman.
 
-Urutan ini adalah rencana, bukan instruksi untuk mulai menjalankan perubahan.
+Urutan ini telah dilaksanakan sampai aktivasi dan pengujian pilot Giri Krida. Prosedur penerapan pada lingkungan atau venue lain tetap memerlukan pemeriksaan konfigurasi, backup, dan rekonsiliasi data sesuai runbook.
 
 ## 14. Kriteria penerimaan utama
 
@@ -488,7 +488,7 @@ Urutan ini adalah rencana, bukan instruksi untuk mulai menjalankan perubahan.
 - Pengguna dapat memilih beberapa jam berurutan tanpa memasukkan ulang jam atau durasi.
 - Slot yang terpisah, court berbeda, atau tanggal berbeda tidak disimpan sebagai satu booking.
 - Permintaan bersamaan tidak menghasilkan pemesanan ganda; kegagalan salah satu slot tidak menghasilkan booking sebagian.
-- Booking website menahan seluruh slot sementara dan menampilkan batas konfirmasi sebenarnya serta kontak pengelola.
+- Booking website menahan seluruh slot sementara, menjelaskan aturan durasi penahanan, serta menampilkan status dan kontak pengelola. Tenggat sebenarnya ditampilkan pada dashboard pengelola sesuai revisi tampilan yang disetujui.
 - Batas pending adalah waktu pembuatan ditambah 60 menit atau waktu mulai booking, mana yang lebih dahulu; membuka ulang halaman tidak memperpanjangnya.
 - Konfirmasi hanya berhasil sebelum batas, termasuk saat proses kedaluwarsa berjalan bersamaan atau terlambat memperbarui database.
 - Kedaluwarsa mempertahankan riwayat dan melepas hanya slot yang memenuhi syarat; booking dikonfirmasi tidak terkena tenggat pending lagi.
@@ -512,6 +512,8 @@ Urutan ini adalah rencana, bukan instruksi untuk mulai menjalankan perubahan.
 - Admin dapat melihat kesehatan proses dan peringatan jika lebih dari tiga menit tanpa keberhasilan atau terdapat penumpukan yang belum diproses.
 - Tampilan tetap responsif, memiliki label yang jelas, dan dapat digunakan dengan keyboard.
 
-## 15. Batas pekerjaan saat dokumen dibuat
+## 15. Status penerapan dan batas verifikasi
 
-Hanya dokumentasi kesimpulan diskusi yang dibuat. Tidak ada perubahan controller, model, route, autentikasi, database, logika booking, atau antarmuka dalam pekerjaan ini. Implementasi menunggu instruksi berikutnya.
+Implementasi tahap 1–7 selesai. Giri Krida Court A aktif dengan jam 08.00–22.00 WIB dan rentang 14 hari termasuk hari ini. Konfirmasi, pembatalan, kedaluwarsa alami pada batas jam mulai, serta pengisian kembali rentang jadwal telah diverifikasi dalam pilot. Riwayat data lama dipertahankan.
+
+Uji langsung menunggu 60 menit penuh belum dilakukan dalam pilot. Pemantauan ini juga belum membuktikan layanan berjalan tanpa gangguan selama beberapa hari. Scheduler lokal bergantung pada komputer, sesi pengguna task Windows, dan MySQL. Venue lain belum diaktifkan. Lihat [laporan penerimaan pilot](qa/giri-krida-pilot-acceptance.md) dan [runbook cutover](qa/hourly-booking-stage-7-cutover.md) untuk bukti dan prosedur operasional.
