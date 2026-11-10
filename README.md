@@ -39,6 +39,13 @@ Implementasi booking per jam sudah diterapkan dan pilot **Giri Krida, Court A** 
 
 Scheduler memeriksa kedaluwarsa setiap menit dan pembentukan slot setiap 15 menit sampai berhasil pada hari tersebut. Pada lingkungan lokal Windows, task memakai peluncur tersembunyi. Komputer, sesi pengguna task, dan MySQL perlu aktif agar proses otomatis berjalan. Konfigurasi database dan Windows Task Scheduler setempat perlu disiapkan tersendiri pada lingkungan lain.
 
+## Dokumentasi
+
+- [Aturan booking per jam](docs/booking-hourly-slots-plan.md)
+- [Arsitektur dan integritas data](docs/booking-hourly-architecture.md)
+- [Operasional dan pemulihan](docs/operations.md)
+- [Penerimaan dan batas pengujian](docs/qa/acceptance.md)
+
 ## Tampilan Aplikasi
 
 Antarmuka menggunakan identitas **Arenaku Courtside** pada halaman publik, alur booking, autentikasi, serta dashboard admin dan penjaga. Berikut tampilan halaman publik dan booking per jam yang diambil pada 9 November 2026.
