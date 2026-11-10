@@ -1,4 +1,4 @@
-# Penerimaan pilot Giri Krida
+# Penerimaan UI dan booking Arenaku
 
 Tanggal pemeriksaan 9 November 2026. Semua waktu menggunakan WIB.
 
@@ -34,4 +34,30 @@ Skenario menunggu 60 menit penuh tidak diulang secara langsung dalam pilot ini. 
 
 Bukti screenshot lokal tersimpan di tests/.runtime/pilot-cancellation-receipt.png dan tests/.runtime/pilot-expiry-receipt.png, folder yang diabaikan Git.
 
-Pesan commit yang disarankan adalah docs(qa): record Giri Krida pilot acceptance results.
+
+## Bukti regresi otomatis
+
+Hasil historis berikut bukan eksekusi ulang pada 10 November.
+
+| Checkpoint | Bukti dan batas |
+| --- | --- |
+| Fondasi akses dan schema | MySQL terisolasi memverifikasi role, scope venue, penolakan source oleh akun test, constraint dan retensi legacy |
+| Operasional dan lifecycle | Verifikasi jam/penutupan, pembentukan idempotent, slot berurutan, retry, expiry dan konfirmasi pada tenggat |
+| Concurrency | Worker paralel menguji bentrok slot, retry key yang sama, serta expiry bersamaan konfirmasi |
+| Integrasi publik | 39 tes / 625 assertions, termasuk receipt lintas sesi 404, HTTP booking multi-slot, konflik atomik dan penolakan writer legacy venue aktif |
+| Maintenance | 40 tes / 659 assertions, termasuk preflight, aktivasi, retry kegagalan, backlog dan catch-up dua hari |
+| Simulasi konfigurasi pilot | 41 tes / 674 assertions termasuk tes sementara Court A 08.00–22.00 selama 14 hari; tes sementara dibersihkan setelah run |
+
+Suite memakai php tests/run.php. Akun/schema uji dibersihkan dan fingerprint operasional source tetap sama. Lint PHP, sintaks JS, kompilasi Blade serta diff checks lulus pada pekerjaan terkait. [Instruksi pengujian](../../tests/README.md).
+
+## Penerimaan antarmuka
+
+Pratinjau fixture hourly dashboard/publik ditinjau pada 360, 390, 768, 1024, dan 1440 piksel. Cakupan termasuk overflow, label, keyboard checkbox, ringkasan pilihan, slot berubah dipesan, batas jam mulai, serta kegagalan pembaruan sambil mempertahankan pilihan/isian. Pratinjau fixture memakai submit nonaktif; submit nyata tercakup pada suite HTTP terisolasi dan alur pilot yang dijelaskan di atas.
+
+Sesi admin dan penjaga nyata juga dipakai dalam QA dashboard sebelum hourly. Perbaikan mencakup deskripsi tabel panjang, overflow mobile akibat teks aksesibel, dan batas fokus Tab/Shift+Tab modal. Escape dan pemulihan fokus diperiksa pada skenario yang tercatat. Penerimaan visual dashboard menyeluruh tetap PARTIAL. Retest shared fixes pada sesi admin, beberapa kombinasi halaman/lebar admin, profil/user/booking secara penuh, backdrop click, upload preview, modal validation recovery, empty state dan pagination halaman kedua belum terverifikasi menyeluruh. Tidak mengklaim semua CRUD tulis telah diuji pada data utama.
+
+## Batas lingkungan dan tindak lanjut
+
+Mix legacy belum menjadi build yang terverifikasi lengkap. Hindari output SCSS yang menimpa aset vendor. Audit aksesibilitas parsial, tanpa sertifikasi WCAG atau pengujian pembaca layar lengkap. Pemulihan email reset password dan deployment produksi belum tercakup dalam penerimaan pilot.
+
+[Operasional](../operations.md) menjelaskan pemantauan dan penerapan berikutnya.
